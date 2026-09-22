@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="305" height="267" viewBox="0 0 305 267" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Garden paths and manor marker" clip-path="url(#clip0_0_8)">
+<path id="Vector" d="M305 0H0V267H305V0Z" fill="#F0EBE0"/>
+<path id="Vector_2" d="M20 18H118V74H20V18ZM178 185H279V252H178V185ZM14 134H83V251H14V134Z" fill="#E0DFD0"/>
+<path id="Vector_3" d="M245 86C263.225 86 278 75.2548 278 62C278 48.7452 263.225 38 245 38C226.775 38 212 48.7452 212 62C212 75.2548 226.775 86 245 86Z" fill="#D4DACB"/>
+<path id="Vector_4" d="M-10 100C69 85 100 76 153 92C206 108 253 134 316 105M104 -10C121 47 105 79 111 119C117 159 158 199 122 277M-10 214C91 179 233 180 316 210" stroke="#FCF9F3" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M-10 100C69 85 100 76 153 92C206 108 253 134 316 105M104 -10C121 47 105 79 111 119C117 159 158 199 122 277M-10 214C91 179 233 180 316 210" stroke="#CFBAB0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_0_8">
+<rect width="305" height="267" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Illustration / Under the stars" clip-path="url(#clip0_0_4)">
+<path id="Vector" opacity="0.01" d="M64 0H0V64H64V0Z" fill="#F7F1E7"/>
+<g id="Group">
+<path id="Vector_2" d="M9 6V12M6 9H12M37 47V29L48 26V43M29 9C14 11 8 29 16 41C23 52 38 54 49 44C34 48 20 37 23 22C23.6667 17.3333 25.6667 13 29 9ZM45 8L47 14L53 16L47 18L45 24L43 18L37 16L43 14L45 8ZM54 29L55 33L59 34L55 35L54 39L53 35L49 34L53 33L54 29Z" stroke="#6B303F" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M34.3551 50.3492C36.1715 49.6881 37.2612 48.1004 36.7889 46.8029C36.3167 45.5055 34.4614 44.9896 32.6449 45.6508C30.8285 46.3119 29.7388 47.8996 30.2111 49.1971C30.6833 50.4945 32.5386 51.0104 34.3551 50.3492Z" stroke="#6B303F" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M45.3551 46.3492C47.1715 45.6881 48.2612 44.1004 47.7889 42.8029C47.3167 41.5055 45.4614 40.9896 43.6449 41.6508C41.8285 42.3119 40.7388 43.8996 41.2111 45.1971C41.6833 46.4945 43.5386 47.0104 45.3551 46.3492Z" stroke="#6B303F" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M9 53L10 56L13 57L10 58L9 61L8 58L5 57L8 56" stroke="#6B303F" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_4">
+<rect width="64" height="64" fill="white"/>
+</clipPath>
+</defs>
+</svg>

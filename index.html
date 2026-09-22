@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en" class="is-locked">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f1e7">
+  <title>Charlotte &amp; James — Wedding Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500&family=Pinyon+Script&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 0. Gate: two lace leaves tied with a wine bow and sealed. A tap unties the ribbon, the seal
+       falls away and the leaves part to either side, uncovering the hero. -->
+  <div class="gate" id="gate" role="button" tabindex="0" aria-label="Untie the ribbon to open the invitation">
+    <div class="gate__leaf gate__leaf--left">
+      <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="">
+      <img class="gate__art gate__art--untied" src="assets/img/gate-untied.jpg" alt="">
+    </div>
+    <div class="gate__leaf gate__leaf--right">
+      <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="">
+      <img class="gate__art gate__art--untied" src="assets/img/gate-untied.jpg" alt="">
+    </div>
+    <img class="gate__seal" src="assets/img/seal.png" alt="">
+  </div>
+
+  <audio class="music" src="assets/sounds/music.mp3" loop preload="none"></audio>
+
+  <main class="app">
+
+    <!-- 1. Invitation -->
+    <section class="screen screen--hero" id="top">
+      <div class="stage">
+        <img class="hero__garden" src="assets/img/garden.jpg" alt="">
+
+        <header class="masthead">
+          <img src="assets/icons/logo.svg" alt="Invitated" width="103" height="24">
+          <div class="masthead__tools">
+            <span class="lang" aria-label="Language: English">
+              <img src="assets/icons/globe.svg" alt="" width="14" height="14">
+              <span>EN</span>
+              <img class="lang__chevron" src="assets/icons/chevron-down.svg" alt="" width="8" height="4">
+            </span>
+            <button class="sound" type="button" aria-label="Music" aria-pressed="false">
+              <img class="sound__off" src="assets/icons/sound-off.svg" alt="" width="24" height="24">
+              <img class="sound__on" src="assets/icons/sound-on.svg" alt="" width="24" height="24">
+            </button>
+          </div>
+        </header>
+
+        <div class="at hero__names" style="--x:48px; --y:251px; --w:299px">
+          <p class="t-eyebrow">TOGETHER WITH OUR FAMILIES</p>
+          <h1 class="names">
+            <span class="t-name">Charlotte</span>
+            <span class="t-amp">&amp;</span>
+            <span class="t-name">James</span>
+          </h1>
+        </div>
+
+        <div class="at hero__details" style="--x:63px; --y:495px; --w:269px">
+          <p class="t-eyebrow">ARE GETTING MARRIED</p>
+          <p class="t-date">18 · 09 · 2027</p>
+          <p class="t-eyebrow t-olive">ROSEWOOD MANOR, THE COTSWOLDS</p>
+        </div>
+
+        <div class="hero__fade"></div>
+        <a class="scroll-down" href="#letter">
+          <span class="t-button">Scroll down</span>
+          <span class="scroll-down__arrows" aria-hidden="true">
+            <img src="assets/icons/arrow-down.svg" alt="" width="14" height="10">
+            <img src="assets/icons/arrow-down.svg" alt="" width="14" height="10">
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 2. Our letter -->
+    <section class="screen screen--ivory" id="letter">
+      <div class="stage">
+        <div class="letter rise">
+          <img class="letter__lace" src="assets/img/letter-lace.jpg" alt="">
+          <img class="letter__bow" src="assets/icons/bow.svg" alt="" width="55" height="30">
+          <div class="letter__content">
+            <h2 class="t-script-42">Dear friends,</h2>
+            <p class="t-small t-ink letter__text">We are delighted to invite you to share one of the most important days of our lives with us. Your presence will make this day truly special</p>
+            <p class="t-script-30">With love,<br>C &amp; J</p>
+          </div>
+        </div>
+        <div class="divider" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+      </div>
+    </section>
+
+    <!-- 3. Save the date: tap the envelope to open it and show the card -->
+    <section class="screen screen--paper screen--date" id="date">
+      <div class="stage">
+        <p class="at t-eyebrow" style="--x:40px; --y:47px; --w:313px">OUR WEDDING DAY</p>
+        <h2 class="at t-script-44 rise" style="--x:32px; --y:98px; --w:329px">Save the date</h2>
+
+        <button class="envelope" type="button" aria-label="Open the envelope" aria-expanded="false">
+          <span class="envelope__art envelope__art--closed"></span>
+          <span class="envelope__art envelope__art--open"></span>
+          <span class="envelope__card">
+            <span class="t-day">18</span>
+            <span class="t-month">September 2027</span>
+            <span class="t-small">Saturday · 4:00 PM</span>
+          </span>
+        </button>
+
+        <p class="at t-body t-muted envelope__hint envelope__hint--closed" style="--x:32px; --y:574px; --w:329px">Open the envelope<br>to save our date.</p>
+        <p class="at t-body t-muted envelope__hint envelope__hint--open" style="--x:32px; --y:574px; --w:329px">Join us from 3:30 PM<br>at Rosewood Manor.</p>
+        <img class="at" src="assets/icons/bow-small.svg" alt="" style="--x:174.5px; --y:622px; --w:44px">
+      </div>
+    </section>
+
+    <!-- 4. The celebration -->
+    <section class="screen screen--paper" id="program">
+      <div class="stage">
+        <p class="at t-eyebrow" style="--x:40px; --y:51px; --w:313px">THE CELEBRATION</p>
+        <div class="at heading rise" style="--x:36px; --y:110px; --w:321px">
+          <h2 class="t-title">A day to remember</h2>
+          <p class="t-body t-muted">A little order to all the magic.</p>
+        </div>
+
+        <div class="timeline__ribbon"></div>
+        <ol class="timeline">
+          <li class="moment rise">
+            <img class="moment__icon" src="assets/icons/ic-arrival.svg" alt="" width="64" height="64">
+            <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
+            <p class="moment__text"><span class="t-time">3:30 PM</span><span class="t-event">Guest arrival</span></p>
+          </li>
+          <li class="moment rise">
+            <img class="moment__icon" src="assets/icons/ic-photo.svg" alt="" width="64" height="64">
+            <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
+            <p class="moment__text"><span class="t-time">4:00 PM</span><span class="t-event">Photoshoot</span></p>
+          </li>
+          <li class="moment rise">
+            <img class="moment__icon" src="assets/icons/ic-celebration.svg" alt="" width="64" height="64">
+            <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
+            <p class="moment__text"><span class="t-time">5:00 PM</span><span class="t-event">The start of<br>the celebration</span></p>
+          </li>
+          <li class="moment rise">
+            <img class="moment__icon" src="assets/icons/ic-wedding.svg" alt="" width="64" height="64">
+            <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
+            <p class="moment__text"><span class="t-time">6:00 PM</span><span class="t-event">Wedding</span></p>
+          </li>
+          <li class="moment rise">
+            <img class="moment__icon" src="assets/icons/ic-stars.svg" alt="" width="64" height="64">
+            <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
+            <p class="moment__text"><span class="t-time">8:00 PM</span><span class="t-event">Under the stars</span></p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 5. The venue -->
+    <section class="screen screen--ivory" id="venue">
+      <div class="stage">
+        <p class="at t-eyebrow" style="--x:30px; --y:51px; --w:333px">A PLACE TO FALL IN LOVE</p>
+        <h2 class="at t-title rise" style="--x:32px; --y:109px; --w:329px">Meet us in the garden.</h2>
+
+        <div class="venue rise">
+          <img class="venue__frame" src="assets/img/venue-frame.jpg" alt="">
+          <div class="venue__window">
+            <img src="assets/img/garden.jpg" alt="Rosewood Manor">
+          </div>
+        </div>
+
+        <div class="at venue__details" style="--x:36px; --y:568px; --w:321px">
+          <h3 class="t-title-32">Rosewood Manor</h3>
+          <p class="t-eyebrow">THE COTSWOLDS, ENGLAND</p>
+          <p class="t-body t-muted">A countryside celebration among the roses.<br>Arrive 30 minutes before the ceremony.<br>Parking is available at the main entrance.</p>
+        </div>
+
+        <div class="at actions" style="--x:26px; --y:744px; --w:341px">
+          <button class="btn" type="button" data-sheet="map">
+            <img src="assets/icons/ic-pin.svg" alt="" width="16" height="18">Get directions
+          </button>
+          <button class="btn" type="button" data-sheet="calendar">
+            <img src="assets/icons/ic-calendar.svg" alt="" width="16" height="18">Calendar
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Dress code -->
+    <section class="screen screen--paper" id="dress">
+      <div class="stage">
+        <p class="at t-eyebrow" style="--x:40px; --y:51px; --w:313px">WHAT TO WEAR</p>
+        <div class="at heading heading--wide rise" style="--x:40px; --y:116px; --w:313px">
+          <h2 class="t-title">Dress code</h2>
+          <p class="t-body t-muted">An evening of timeless elegance.</p>
+        </div>
+        <div class="at attire rise" style="--x:50px; --y:248px; --w:293px">
+          <p class="t-small t-wine">FORMAL · BLACK TIE</p>
+          <p class="t-body t-muted">Tuxedo or dark suit for gentlemen.<br>Long or cocktail dress for ladies.<br>We kindly ask you to avoid white.</p>
+        </div>
+        <ul class="at palette" style="--x:46.5px; --y:388px; --w:300px">
+          <li class="rise"><img src="assets/img/sw-champagne.png" alt="" width="44" height="44">CHAMPAGNE</li>
+          <li class="rise"><img src="assets/img/sw-taupe.png" alt="" width="44" height="44">TAUPE</li>
+          <li class="rise"><img src="assets/img/sw-rose.png" alt="" width="44" height="44">DUSTY ROSE</li>
+          <li class="rise"><img src="assets/img/sw-wine.png" alt="" width="44" height="44">WINE</li>
+        </ul>
+        <img class="at" src="assets/icons/bow-dress.svg" alt="" style="--x:174px; --y:479px; --w:45px">
+        <img class="at guests rise" src="assets/img/guests.jpg" alt="Guests in evening wear" style="--x:24px; --y:522px; --w:345px">
+        <p class="at t-eyebrow t-muted" style="--x:40px; --y:811px; --w:313px">A little inspiration for our evening together.</p>
+      </div>
+    </section>
+
+    <!-- 7. RSVP. Sends nowhere yet: on submit the section turns into the thank-you state. -->
+    <section class="screen screen--wine" id="rsvp">
+      <div class="stage rsvp">
+        <div class="rsvp__heading rise">
+          <h2 class="t-script-44">Confirm your attendance</h2>
+          <p class="t-body">Please let us know<br>if you can come.</p>
+        </div>
+
+        <div class="reply-card">
+          <img class="reply-card__lace" src="assets/img/rsvp-lace.jpg" alt="">
+          <form class="reply" novalidate>
+            <label class="field">
+              <span class="t-label">Your first and last name</span>
+              <input class="pill" type="text" name="name" placeholder="David Miller" autocomplete="name" required>
+            </label>
+            <fieldset class="field">
+              <legend class="t-label">Will you be able to come?</legend>
+              <label class="pill choice">
+                <input type="radio" name="attendance" value="yes" required>
+                <span class="choice__dot"></span>Yes, with pleasure!
+              </label>
+              <label class="pill choice">
+                <input type="radio" name="attendance" value="no">
+                <span class="choice__dot"></span>Unfortunately, I can't.
+              </label>
+            </fieldset>
+            <label class="field">
+              <span class="t-label">Message (optional)</span>
+              <textarea class="pill pill--area" name="message" rows="3"></textarea>
+            </label>
+            <button class="btn btn--light" type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="stage thanks" hidden>
+        <img class="at" src="assets/icons/bow-large.svg" alt="" style="--x:145px; --y:152px; --w:103px">
+        <div class="at thanks__text" style="--x:32px; --y:295px; --w:329px">
+          <p class="t-eyebrow">WITH LOVE &amp; GRATITUDE</p>
+          <h2 class="t-title-40">Thank you<br>for your reply.</h2>
+          <p class="t-body t-muted">You are part of our story.<br>We are so grateful to have you in it.</p>
+          <p class="t-script-30">Charlotte &amp; James</p>
+        </div>
+        <a class="at btn" href="#top" style="--x:114px; --y:701px; --w:165px">Back to invitation</a>
+        <p class="at t-eyebrow t-muted" style="--x:32px; --y:785px; --w:329px">Prototype preview · no response is sent</p>
+      </div>
+    </section>
+
+    <!-- 8. With love: scratch the lace oval to reveal the photo -->
+    <section class="screen screen--ivory" id="closing">
+      <div class="stage">
+        <p class="at t-eyebrow" style="--x:30px; --y:51px; --w:333px">UNTIL THEN, WITH ALL OUR LOVE</p>
+        <img class="at oval-frame" src="assets/img/oval-frame.jpg" alt="" style="--x:14px; --y:98px; --w:365px">
+        <div class="scratch">
+          <img class="scratch__photo" src="assets/img/couple.png" alt="Charlotte and James">
+          <canvas class="scratch__cover" aria-hidden="true"></canvas>
+          <p class="scratch__hint">SCRATCH TO REVEAL</p>
+        </div>
+        <p class="at t-script-34" style="--x:32px; --y:699px; --w:329px">Charlotte &amp; James</p>
+        <div class="at closing__footer" style="--x:32px; --y:766px; --w:329px">
+          <p class="t-eyebrow">18 SEPTEMBER 2027</p>
+          <a class="t-eyebrow t-strong" href="#top">BACK TO THE TOP&nbsp;&nbsp;↑</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Sheets opened from the venue buttons -->
+  <div class="sheet" id="sheet-calendar" role="dialog" aria-modal="true" aria-label="Calendar" hidden>
+    <div class="sheet__backdrop" data-close></div>
+    <div class="sheet__panel">
+      <div class="stage">
+        <button class="sheet__close" type="button" aria-label="Close" data-close><img src="assets/icons/close.svg" alt="" width="16" height="16"></button>
+        <p class="at t-month" style="--x:46px; --y:64px; --w:301px">September 2027</p>
+        <div class="calendar">
+          <span class="calendar__dow">M</span><span class="calendar__dow">T</span><span class="calendar__dow">W</span><span class="calendar__dow">T</span><span class="calendar__dow">F</span><span class="calendar__dow">S</span><span class="calendar__dow">S</span>
+          <span></span><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+          <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
+          <span>13</span><span>14</span><span>15</span><span>16</span><span>17</span>
+          <button class="calendar__day" type="button" aria-label="Add 18 September 2027 to your calendar">18</button>
+          <span>19</span>
+          <span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span>
+          <span>27</span><span>28</span><span>29</span><span>30</span>
+        </div>
+        <p class="at t-body t-muted" style="--x:40px; --y:407px; --w:313px">Saturday, 18 September · 4:00 PM</p>
+        <img class="at" src="assets/icons/bow-dress.svg" alt="" style="--x:174px; --y:449px; --w:45px">
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheet-map" role="dialog" aria-modal="true" aria-label="Find us" hidden>
+    <div class="sheet__backdrop" data-close></div>
+    <div class="sheet__panel">
+      <div class="stage">
+        <button class="sheet__close" type="button" aria-label="Close" data-close><img src="assets/icons/close.svg" alt="" width="16" height="16"></button>
+        <h2 class="at t-title-32" style="--x:46px; --y:54px; --w:301px">Find us</h2>
+        <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Rosewood+Manor+Cotswolds" target="_blank" rel="noopener" aria-label="Open Rosewood Manor in Maps">
+          <img class="map__art" src="assets/icons/map.svg" alt="">
+          <span class="map__label">ROSEWOOD MANOR</span>
+        </a>
+        <img class="map__pin" src="assets/icons/map-pin.svg" alt="">
+        <p class="at t-label t-wine" style="--x:36px; --y:405px; --w:321px">Rosewood Manor · The Cotswolds</p>
+        <p class="at t-small t-muted" style="--x:36px; --y:437px; --w:321px">Parking is available at the main entrance.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

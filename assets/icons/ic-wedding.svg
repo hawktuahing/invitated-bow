@@ -1,0 +1,15 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Illustration / Wedding" clip-path="url(#clip0_0_11)">
+<path id="Vector" opacity="0.01" d="M64 0H0V64H64V0Z" fill="#F7F1E7"/>
+<g id="Group">
+<path id="Vector_2" d="M23 55C31.2843 55 38 47.3888 38 38C38 28.6112 31.2843 21 23 21C14.7157 21 8 28.6112 8 38C8 47.3888 14.7157 55 23 55Z" stroke="#6B303F" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M23 51.5C29.3513 51.5 34.5 45.4558 34.5 38C34.5 30.5442 29.3513 24.5 23 24.5C16.6487 24.5 11.5 30.5442 11.5 38C11.5 45.4558 16.6487 51.5 23 51.5Z" stroke="#6B303F" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M37 22C49 19 57 28 56 39C55 52 43 59 33 52M37 26C47 23 54 30 52 40C50 49 41 54 35 49M31 18L27 12L15 15L16 21M15 15H20M20 15L21 20M20 15L22 12L26 18M10 15L7 12M12 7L13 11M5 22L9 23M56 19L59 17M58 27H62M37 12C31 7 29 15 37 19C45 15 43 7 37 12Z" stroke="#6B303F" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_11">
+<rect width="64" height="64" fill="white"/>
+</clipPath>
+</defs>
+</svg>
