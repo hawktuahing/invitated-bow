@@ -137,12 +137,15 @@
   const program = document.getElementById("program");
   const pinStage = program.querySelector(".stage");
 
+  // How much scrolling the whole timeline takes, in stage pixels.
+  const scrollSpan = () => ribbon.offsetHeight * TRAVEL + bows.length * DWELL + TAIL;
+
   // The pinned screen is as tall as the viewport, with the animation's length added to the track.
   const measurePin = () => {
     const zoom = Math.min(Math.min(1, root.clientWidth / 393), innerHeight / 852);
     pinStage.style.zoom = zoom.toFixed(4);
     program.style.setProperty("--pin-h", `${innerHeight}px`);
-    program.style.setProperty("--pin-run", `${(493 + bows.length * DWELL + TAIL) * zoom}px`);
+    program.style.setProperty("--pin-run", `${scrollSpan() * zoom}px`);
   };
 
   const measureBows = () => {
@@ -176,8 +179,11 @@
   }).catch(() => {});
 
   // While the screen is pinned, the scroll pulls the thread down. At every bow it stops for DWELL
-  // pixels of scrolling — that is the stretch where the bow ties itself — then goes on.
-  const DWELL = 62;
+  // pixels of scrolling — that is the stretch where the bow ties itself — then goes on. TRAVEL is
+  // how much scrolling the run between two bows costs, as a share of the distance: the thread
+  // covers it quickly so most of the scroll is spent on the bows.
+  const DWELL = 110;
+  const TRAVEL = 0.55;
   const TAIL = 140; // a moment on the finished timeline before the screen lets go
   const clamp01 = (n) => Math.max(0, Math.min(1, n));
   const drawRibbon = () => {
@@ -186,14 +192,14 @@
     // Layout pixels, so the rows' own fade-in cannot move the measurements around.
     const run = Math.max(1, program.offsetHeight - innerHeight);
     const q = clamp01(-program.getBoundingClientRect().top / run);
-    let pulled = q * (ribbon.offsetHeight + bows.length * DWELL + TAIL);
+    let pulled = q * scrollSpan();
     let thread = 0;
     let from = 0;
     const ties = [];
     for (const bow of bows) {
       const knot = bow.knot; // where this bow sits along the thread
-      const gap = Math.max(0, knot - from);
-      if (pulled < gap) { thread = from + Math.max(0, pulled); ties.push(0); pulled = -Infinity; continue; }
+      const gap = Math.max(0, knot - from) * TRAVEL;
+      if (pulled < gap) { thread = from + Math.max(0, pulled) / TRAVEL; ties.push(0); pulled = -Infinity; continue; }
       if (pulled === -Infinity) { ties.push(0); continue; }
       pulled -= gap;
       thread = knot;
@@ -202,7 +208,7 @@
       from = knot;
       if (pulled < 0) pulled = -Infinity;
     }
-    if (pulled > 0) thread = from + pulled;
+    if (pulled > 0) thread = from + pulled / TRAVEL;
 
     ribbon.style.setProperty("--p", reduceMotion ? 1 : clamp01(thread / ribbon.offsetHeight).toFixed(4));
     for (const [i, bow] of bows.entries()) {
