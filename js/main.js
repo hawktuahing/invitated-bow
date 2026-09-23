@@ -7,9 +7,114 @@
   fit();
   addEventListener("resize", fit);
 
+  /* ---------- Language ---------- */
+  const LANGS = ["en", "ru", "uz"];
+  const lang = {
+    current: "en",
+    t(key) { return (window.I18N[this.current] || {})[key] ?? window.I18N.en[key] ?? key; },
+  };
+
+  const applyLang = (code) => {
+    lang.current = LANGS.includes(code) ? code : "en";
+    root.lang = lang.current;
+    document.title = lang.t("meta.title");
+    for (const el of document.querySelectorAll("[data-i18n]")) {
+      const value = lang.t(el.dataset.i18n);
+      if (el.innerHTML !== value) el.innerHTML = value;
+    }
+    for (const el of document.querySelectorAll("[data-i18n-attr]")) {
+      for (const pair of el.dataset.i18nAttr.split(",")) {
+        const [attr, key] = pair.split(":");
+        el.setAttribute(attr.trim(), lang.t(key.trim()));
+      }
+    }
+    // The envelope's label depends on its state, so it is set here rather than from the attribute.
+    envelope?.setAttribute("aria-label", lang.t(envelope.classList.contains("is-open") ? "save.closeAria" : "save.openAria"));
+    document.querySelector(".lang__code").textContent = lang.current.toUpperCase();
+    for (const option of document.querySelectorAll(".lang__menu [data-lang]")) {
+      option.setAttribute("aria-selected", String(option.dataset.lang === lang.current));
+    }
+    try { localStorage.setItem("bow:lang", lang.current); } catch {}
+  };
+
+  const langBox = document.querySelector(".lang");
+  const langButton = langBox.querySelector(".lang__button");
+  const langMenu = langBox.querySelector(".lang__menu");
+  const closeLangMenu = () => {
+    langMenu.hidden = true;
+    langBox.classList.remove("is-open");
+    langButton.setAttribute("aria-expanded", "false");
+  };
+  langButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = langMenu.hidden;
+    langMenu.hidden = !open;
+    langBox.classList.toggle("is-open", open);
+    langButton.setAttribute("aria-expanded", String(open));
+  });
+  langMenu.addEventListener("click", (e) => {
+    const option = e.target.closest("[data-lang]");
+    if (!option) return;
+    applyLang(option.dataset.lang);
+    closeLangMenu();
+  });
+  addEventListener("click", (e) => { if (!langBox.contains(e.target)) closeLangMenu(); });
+
+  /* ---------- Top bar: hides going down, comes back going up ---------- */
+  const topbar = document.getElementById("topbar");
+  let lastY = scrollY;
+  const onScroll = () => {
+    const y = Math.max(0, scrollY);
+    const down = y > lastY + 4;
+    const up = y < lastY - 4;
+    if (down && y > 120) topbar.classList.add("is-hidden");
+    else if (up || y < 60) topbar.classList.remove("is-hidden");
+    topbar.classList.toggle("is-solid", y > 40); // a backdrop as soon as text could run under it
+    lastY = y;
+  };
+  addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- Smooth scrolling (desktop wheels; phones already glide) ---------- */
+  const smooth = { target: scrollY, running: false };
+  const maxScroll = () => document.body.scrollHeight - innerHeight;
+  const useSmooth = matchMedia("(pointer: fine)").matches && !reduceMotion;
+  if (useSmooth) {
+    const step = () => {
+      const delta = smooth.target - scrollY;
+      if (Math.abs(delta) < 0.5) { smooth.running = false; scrollTo(0, smooth.target); return; }
+      scrollTo(0, scrollY + delta * 0.14);
+      requestAnimationFrame(step);
+    };
+    const glideTo = (y) => {
+      smooth.target = Math.max(0, Math.min(y, maxScroll()));
+      if (!smooth.running) { smooth.running = true; requestAnimationFrame(step); }
+    };
+    addEventListener("wheel", (e) => {
+      if (root.classList.contains("is-locked") || e.ctrlKey) return;
+      e.preventDefault();
+      const lines = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1;
+      glideTo((smooth.running ? smooth.target : scrollY) + e.deltaY * lines);
+    }, { passive: false });
+    addEventListener("scroll", () => { if (!smooth.running) smooth.target = scrollY; }, { passive: true });
+    window.glideTo = glideTo;
+  }
+  const scrollToY = (y) => {
+    if (useSmooth) window.glideTo(y);
+    else scrollTo({ top: y, behavior: reduceMotion ? "auto" : "smooth" });
+  };
+  // Anchors are handled here so they glide with the same easing as the wheel.
+  for (const link of document.querySelectorAll('a[href^="#"]')) {
+    link.addEventListener("click", (e) => {
+      const target = document.querySelector(link.getAttribute("href"));
+      if (!target) return;
+      e.preventDefault();
+      scrollToY(target.getBoundingClientRect().top + scrollY);
+    });
+  }
+
   /* ---------- Blocks that lift in on first view ---------- */
   root.classList.add("is-animated");
-  const risers = document.querySelectorAll(".rise, .timeline__ribbon");
   const riseObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
@@ -17,37 +122,77 @@
       riseObserver.unobserve(entry.target);
     }
   }, { rootMargin: "0px 0px -12% 0px" });
-  risers.forEach((el) => riseObserver.observe(el));
+  document.querySelectorAll(".rise, .timeline__ribbon").forEach((el) => riseObserver.observe(el));
 
-  /* ---------- Music ---------- */
+  /* ---------- Music: a real toggle, with a fade and no pretending when there is no track ---------- */
   const music = document.querySelector(".music");
   const sound = document.querySelector(".sound");
-  const setSound = (on) => {
-    sound.setAttribute("aria-pressed", String(on));
-    if (on) music.play().catch(() => sound.setAttribute("aria-pressed", "false")); // no track yet
-    else music.pause();
+  let fade = null;
+  const fadeTo = (to, done) => {
+    clearInterval(fade);
+    fade = setInterval(() => {
+      music.volume = Math.max(0, Math.min(1, music.volume + (to > music.volume ? 0.08 : -0.08)));
+      if (Math.abs(music.volume - to) < 0.08) {
+        music.volume = to;
+        clearInterval(fade);
+        done?.();
+      }
+    }, 40);
   };
-  sound.addEventListener("click", () => setSound(sound.getAttribute("aria-pressed") !== "true"));
+  const markNoTrack = () => {
+    sound.classList.add("is-empty");
+    sound.setAttribute("aria-pressed", "false");
+    sound.setAttribute("aria-disabled", "true");
+    sound.setAttribute("aria-label", lang.t("sound.missing"));
+  };
+  const markTrackFound = () => {
+    sound.classList.remove("is-empty");
+    sound.removeAttribute("aria-disabled");
+    sound.setAttribute("aria-label", lang.t("sound.label"));
+  };
+  music.addEventListener("error", markNoTrack);
+  music.addEventListener("canplay", markTrackFound);
+
+  const playMusic = () => {
+    music.volume = 0;
+    return music.play().then(() => {
+      markTrackFound();
+      sound.setAttribute("aria-pressed", "true");
+      fadeTo(1);
+    }, (err) => {
+      // Blocked autoplay just means "not yet"; a missing or broken file is what dims the button.
+      if (err?.name === "NotAllowedError") sound.setAttribute("aria-pressed", "false");
+      else markNoTrack();
+    });
+  };
+  const stopMusic = () => {
+    sound.setAttribute("aria-pressed", "false");
+    fadeTo(0, () => music.pause());
+  };
+  // A click always tries to play: if a track turns up later, the button comes back to life.
+  sound.addEventListener("click", () => {
+    sound.getAttribute("aria-pressed") === "true" ? stopMusic() : playMusic();
+  });
 
   /* ---------- 0. Gate: untie, drop the seal, part the lace ---------- */
   const gate = document.getElementById("gate");
-  const reveal = () => root.classList.add("is-revealed");
   let opened = false;
-
+  const finishGate = () => {
+    gate.remove();
+    root.classList.remove("is-locked");
+    root.classList.add("is-revealed");
+  };
   const openGate = () => {
     if (opened) return;
     opened = true;
-    setSound(true); // the tap is the user gesture browsers need before audio can start
+    playMusic(); // the tap is the user gesture browsers need before audio can start
     gate.classList.add("is-open");
     const untie = reduceMotion ? 0 : 900;
     setTimeout(() => {
       gate.classList.add("is-parting");
-      reveal();
+      root.classList.add("is-revealed");
     }, untie);
-    setTimeout(() => {
-      gate.remove();
-      root.classList.remove("is-locked");
-    }, untie + (reduceMotion ? 0 : 1500));
+    setTimeout(finishGate, untie + (reduceMotion ? 0 : 1500));
   };
   gate.addEventListener("click", openGate);
   gate.addEventListener("keydown", (e) => {
@@ -58,9 +203,7 @@
   // ?open skips the gate — handy while working on the screens below it.
   if (new URLSearchParams(location.search).has("open")) {
     opened = true;
-    gate.remove();
-    root.classList.remove("is-locked");
-    reveal();
+    finishGate();
   }
 
   /* ---------- 3. Save the date envelope ---------- */
@@ -70,7 +213,7 @@
     envelope.classList.toggle("is-open", open);
     envelope.closest(".screen").classList.toggle("is-open", open);
     envelope.setAttribute("aria-expanded", String(open));
-    envelope.setAttribute("aria-label", open ? "Close the envelope" : "Open the envelope");
+    envelope.setAttribute("aria-label", lang.t(open ? "save.closeAria" : "save.openAria"));
   });
 
   /* ---------- 5. Calendar / map sheets ---------- */
@@ -98,6 +241,7 @@
     if (e.key !== "Escape") return;
     const sheet = document.querySelector(".sheet.is-open");
     if (sheet) closeSheet(sheet);
+    else closeLangMenu();
   });
 
   // The heart on the 18th saves the day to the guest's calendar.
@@ -109,9 +253,9 @@
       "DTSTAMP:20260101T000000Z",
       "DTSTART:20270918T143000Z", // 3:30 PM BST
       "DTEND:20270918T220000Z",
-      "SUMMARY:Charlotte & James — Wedding",
-      "LOCATION:Rosewood Manor\\, The Cotswolds\\, England",
-      "DESCRIPTION:Guests arrive from 3:30 PM. Ceremony at 4:00 PM.",
+      `SUMMARY:${lang.t("cal.summary")}`,
+      `LOCATION:${lang.t("cal.location").replace(/,/g, "\\,")}`,
+      `DESCRIPTION:${lang.t("cal.description")}`,
       "END:VEVENT", "END:VCALENDAR",
     ].join("\r\n");
     const link = document.createElement("a");
@@ -140,7 +284,7 @@
     rsvp.classList.remove("screen--wine");
     rsvp.classList.add("is-sent");
     thanks.classList.add("is-in");
-    rsvp.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    scrollToY(rsvp.getBoundingClientRect().top + scrollY);
   });
   form.addEventListener("input", (e) => e.target.closest(".field")?.classList.remove("is-invalid"));
   form.addEventListener("change", (e) => e.target.closest(".field")?.classList.remove("is-invalid"));
@@ -157,7 +301,7 @@
   ctx.fillRect(0, 0, W, H);
   ctx.globalCompositeOperation = "destination-out";
   ctx.lineCap = ctx.lineJoin = "round";
-  ctx.lineWidth = 44;
+  ctx.lineWidth = 48;
 
   let last = null;
   let strokes = 0;
@@ -191,15 +335,14 @@
   const endStroke = () => {
     if (!last) return;
     last = null;
-    // Circle-in-a-rect: the oval is ~79% of the canvas, so ~45% cleared shows most of the photo.
-    if (++strokes >= 2 && clearedShare() > 0.45) scratch.classList.add("is-clear");
+    // The oval is ~79% of the canvas, so a third of the rectangle is already most of the photo.
+    if (++strokes >= 2 && clearedShare() > 0.33) scratch.classList.add("is-clear");
   };
   canvas.addEventListener("pointerup", endStroke);
   canvas.addEventListener("pointercancel", endStroke);
 
-  /* ---------- Back to top ---------- */
-  document.querySelectorAll('a[href="#top"]').forEach((a) => a.addEventListener("click", (e) => {
-    e.preventDefault();
-    scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-  }));
+  /* ---------- Start in the language the guest chose last time ---------- */
+  let saved = null;
+  try { saved = localStorage.getItem("bow:lang"); } catch {}
+  applyLang(saved || (LANGS.find((code) => navigator.language?.toLowerCase().startsWith(code)) ?? "en"));
 })();

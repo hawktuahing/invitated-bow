@@ -4,17 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f1e7">
-  <title>Charlotte &amp; James — Wedding Invitation</title>
+  <title data-i18n="meta.title">Charlotte &amp; James — Wedding Invitation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500&family=Pinyon+Script&display=swap">
+  <!-- Pinyon Script has no Cyrillic, so Russian falls back to Marck Script (see html[lang=ru]). -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500&family=Pinyon+Script&family=Marck+Script&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <!-- 0. Gate: two lace leaves tied with a wine bow and sealed. A tap unties the ribbon, the seal
        falls away and the leaves part to either side, uncovering the hero. -->
-  <div class="gate" id="gate" role="button" tabindex="0" aria-label="Untie the ribbon to open the invitation">
+  <div class="gate" id="gate" role="button" tabindex="0" data-i18n-attr="aria-label:gate.open">
     <div class="gate__leaf gate__leaf--left">
       <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="">
       <img class="gate__art gate__art--untied" src="assets/img/gate-untied.jpg" alt="">
@@ -26,6 +27,29 @@
     <img class="gate__seal" src="assets/img/seal.png" alt="">
   </div>
 
+  <!-- Sits above every screen, hides when the page is scrolled down and slides back on the way up. -->
+  <header class="topbar" id="topbar">
+    <img class="topbar__logo" src="assets/icons/logo.svg" alt="Invitated" width="103" height="24">
+    <div class="topbar__tools">
+      <div class="lang">
+        <button class="lang__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-i18n-attr="aria-label:lang.label">
+          <img src="assets/icons/globe.svg" alt="" width="14" height="14">
+          <span class="lang__code">EN</span>
+          <img class="lang__chevron" src="assets/icons/chevron-down.svg" alt="" width="8" height="4">
+        </button>
+        <ul class="lang__menu" role="listbox" hidden>
+          <li><button type="button" role="option" data-lang="en" aria-selected="true">English</button></li>
+          <li><button type="button" role="option" data-lang="ru" aria-selected="false">Русский</button></li>
+          <li><button type="button" role="option" data-lang="uz" aria-selected="false">Oʻzbekcha</button></li>
+        </ul>
+      </div>
+      <button class="sound" type="button" aria-pressed="false" data-i18n-attr="aria-label:sound.label">
+        <img class="sound__off" src="assets/icons/sound-off.svg" alt="" width="24" height="24">
+        <img class="sound__on" src="assets/icons/sound-on.svg" alt="" width="24" height="24">
+      </button>
+    </div>
+  </header>
+
   <audio class="music" src="assets/sounds/music.mp3" loop preload="none"></audio>
 
   <main class="app">
@@ -35,39 +59,24 @@
       <div class="stage">
         <img class="hero__garden" src="assets/img/garden.jpg" alt="">
 
-        <header class="masthead">
-          <img src="assets/icons/logo.svg" alt="Invitated" width="103" height="24">
-          <div class="masthead__tools">
-            <span class="lang" aria-label="Language: English">
-              <img src="assets/icons/globe.svg" alt="" width="14" height="14">
-              <span>EN</span>
-              <img class="lang__chevron" src="assets/icons/chevron-down.svg" alt="" width="8" height="4">
-            </span>
-            <button class="sound" type="button" aria-label="Music" aria-pressed="false">
-              <img class="sound__off" src="assets/icons/sound-off.svg" alt="" width="24" height="24">
-              <img class="sound__on" src="assets/icons/sound-on.svg" alt="" width="24" height="24">
-            </button>
-          </div>
-        </header>
-
         <div class="at hero__names" style="--x:48px; --y:251px; --w:299px">
-          <p class="t-eyebrow">TOGETHER WITH OUR FAMILIES</p>
+          <p class="t-eyebrow" data-i18n="hero.families">TOGETHER WITH OUR FAMILIES</p>
           <h1 class="names">
-            <span class="t-name">Charlotte</span>
-            <span class="t-amp">&amp;</span>
-            <span class="t-name">James</span>
+            <span class="t-name" data-i18n="couple.bride">Charlotte</span>
+            <span class="t-amp" data-i18n="couple.amp">&amp;</span>
+            <span class="t-name" data-i18n="couple.groom">James</span>
           </h1>
         </div>
 
         <div class="at hero__details" style="--x:63px; --y:495px; --w:269px">
-          <p class="t-eyebrow">ARE GETTING MARRIED</p>
-          <p class="t-date">18 · 09 · 2027</p>
-          <p class="t-eyebrow t-olive">ROSEWOOD MANOR, THE COTSWOLDS</p>
+          <p class="t-eyebrow" data-i18n="hero.marrying">ARE GETTING MARRIED</p>
+          <p class="t-date" data-i18n="date.short">18 · 09 · 2027</p>
+          <p class="t-eyebrow t-olive" data-i18n="venue.caps">ROSEWOOD MANOR, THE COTSWOLDS</p>
         </div>
 
         <div class="hero__fade"></div>
         <a class="scroll-down" href="#letter">
-          <span class="t-button">Scroll down</span>
+          <span class="t-button" data-i18n="hero.scroll">Scroll down</span>
           <span class="scroll-down__arrows" aria-hidden="true">
             <img src="assets/icons/arrow-down.svg" alt="" width="14" height="10">
             <img src="assets/icons/arrow-down.svg" alt="" width="14" height="10">
@@ -83,9 +92,9 @@
           <img class="letter__lace" src="assets/img/letter-lace.jpg" alt="">
           <img class="letter__bow" src="assets/icons/bow.svg" alt="" width="55" height="30">
           <div class="letter__content">
-            <h2 class="t-script-42">Dear friends,</h2>
-            <p class="t-small t-ink letter__text">We are delighted to invite you to share one of the most important days of our lives with us. Your presence will make this day truly special</p>
-            <p class="t-script-30">With love,<br>C &amp; J</p>
+            <h2 class="t-script-42" data-i18n="letter.greeting">Dear friends,</h2>
+            <p class="t-small t-ink letter__text" data-i18n="letter.body">We are delighted to invite you to share one of the most important days of our lives with us. Your presence will make this day truly special</p>
+            <p class="t-script-30" data-i18n="letter.sign">With love,<br>C &amp; J</p>
           </div>
         </div>
         <div class="divider" aria-hidden="true"><i></i><span>✦</span><i></i></div>
@@ -95,21 +104,21 @@
     <!-- 3. Save the date: tap the envelope to open it and show the card -->
     <section class="screen screen--paper screen--date" id="date">
       <div class="stage">
-        <p class="at t-eyebrow" style="--x:40px; --y:47px; --w:313px">OUR WEDDING DAY</p>
-        <h2 class="at t-script-44 rise" style="--x:32px; --y:98px; --w:329px">Save the date</h2>
+        <p class="at t-eyebrow" style="--x:40px; --y:47px; --w:313px" data-i18n="save.eyebrow">OUR WEDDING DAY</p>
+        <h2 class="at t-script-44 rise" style="--x:32px; --y:98px; --w:329px" data-i18n="save.title">Save the date</h2>
 
-        <button class="envelope" type="button" aria-label="Open the envelope" aria-expanded="false">
+        <button class="envelope" type="button" aria-expanded="false" data-i18n-attr="aria-label:save.openAria">
           <span class="envelope__art envelope__art--closed"></span>
           <span class="envelope__art envelope__art--open"></span>
           <span class="envelope__card">
             <span class="t-day">18</span>
-            <span class="t-month">September 2027</span>
-            <span class="t-small">Saturday · 4:00 PM</span>
+            <span class="t-month" data-i18n="date.monthYear">September 2027</span>
+            <span class="t-small" data-i18n="date.dayTime">Saturday · 4:00 PM</span>
           </span>
         </button>
 
-        <p class="at t-body t-muted envelope__hint envelope__hint--closed" style="--x:32px; --y:574px; --w:329px">Open the envelope<br>to save our date.</p>
-        <p class="at t-body t-muted envelope__hint envelope__hint--open" style="--x:32px; --y:574px; --w:329px">Join us from 3:30 PM<br>at Rosewood Manor.</p>
+        <p class="at t-body t-muted envelope__hint envelope__hint--closed" style="--x:32px; --y:574px; --w:329px" data-i18n="save.hintClosed">Open the envelope<br>to save our date.</p>
+        <p class="at t-body t-muted envelope__hint envelope__hint--open" style="--x:32px; --y:574px; --w:329px" data-i18n="save.hintOpen">Join us from 3:30 PM<br>at Rosewood Manor.</p>
         <img class="at" src="assets/icons/bow-small.svg" alt="" style="--x:174.5px; --y:622px; --w:44px">
       </div>
     </section>
@@ -117,10 +126,10 @@
     <!-- 4. The celebration -->
     <section class="screen screen--paper" id="program">
       <div class="stage">
-        <p class="at t-eyebrow" style="--x:40px; --y:51px; --w:313px">THE CELEBRATION</p>
+        <p class="at t-eyebrow" style="--x:40px; --y:51px; --w:313px" data-i18n="program.eyebrow">THE CELEBRATION</p>
         <div class="at heading rise" style="--x:36px; --y:110px; --w:321px">
-          <h2 class="t-title">A day to remember</h2>
-          <p class="t-body t-muted">A little order to all the magic.</p>
+          <h2 class="t-title" data-i18n="program.title">A day to remember</h2>
+          <p class="t-body t-muted" data-i18n="program.subtitle">A little order to all the magic.</p>
         </div>
 
         <div class="timeline__ribbon"></div>
@@ -128,27 +137,27 @@
           <li class="moment rise">
             <img class="moment__icon" src="assets/icons/ic-arrival.svg" alt="" width="64" height="64">
             <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
-            <p class="moment__text"><span class="t-time">3:30 PM</span><span class="t-event">Guest arrival</span></p>
+            <p class="moment__text"><span class="t-time" data-i18n="program.t1">3:30 PM</span><span class="t-event" data-i18n="program.e1">Guest arrival</span></p>
           </li>
           <li class="moment rise">
             <img class="moment__icon" src="assets/icons/ic-photo.svg" alt="" width="64" height="64">
             <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
-            <p class="moment__text"><span class="t-time">4:00 PM</span><span class="t-event">Photoshoot</span></p>
+            <p class="moment__text"><span class="t-time" data-i18n="program.t2">4:00 PM</span><span class="t-event" data-i18n="program.e2">Photoshoot</span></p>
           </li>
           <li class="moment rise">
             <img class="moment__icon" src="assets/icons/ic-celebration.svg" alt="" width="64" height="64">
             <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
-            <p class="moment__text"><span class="t-time">5:00 PM</span><span class="t-event">The start of<br>the celebration</span></p>
+            <p class="moment__text"><span class="t-time" data-i18n="program.t3">5:00 PM</span><span class="t-event" data-i18n="program.e3">The start of<br>the celebration</span></p>
           </li>
           <li class="moment rise">
             <img class="moment__icon" src="assets/icons/ic-wedding.svg" alt="" width="64" height="64">
             <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
-            <p class="moment__text"><span class="t-time">6:00 PM</span><span class="t-event">Wedding</span></p>
+            <p class="moment__text"><span class="t-time" data-i18n="program.t4">6:00 PM</span><span class="t-event" data-i18n="program.e4">Wedding</span></p>
           </li>
           <li class="moment rise">
             <img class="moment__icon" src="assets/icons/ic-stars.svg" alt="" width="64" height="64">
             <img class="moment__marker" src="assets/icons/ribbon-marker.svg" alt="" width="24" height="40">
-            <p class="moment__text"><span class="t-time">8:00 PM</span><span class="t-event">Under the stars</span></p>
+            <p class="moment__text"><span class="t-time" data-i18n="program.t5">8:00 PM</span><span class="t-event" data-i18n="program.e5">Under the stars</span></p>
           </li>
         </ol>
       </div>
@@ -157,28 +166,38 @@
     <!-- 5. The venue -->
     <section class="screen screen--ivory" id="venue">
       <div class="stage">
-        <p class="at t-eyebrow" style="--x:30px; --y:51px; --w:333px">A PLACE TO FALL IN LOVE</p>
-        <h2 class="at t-title rise" style="--x:32px; --y:109px; --w:329px">Meet us in the garden.</h2>
+        <p class="at t-eyebrow" style="--x:30px; --y:51px; --w:333px" data-i18n="venue.eyebrow">A PLACE TO FALL IN LOVE</p>
+        <h2 class="at t-title rise" style="--x:32px; --y:109px; --w:329px" data-i18n="venue.title">Meet us in the garden.</h2>
 
         <div class="venue rise">
           <img class="venue__frame" src="assets/img/venue-frame.jpg" alt="">
           <div class="venue__window">
-            <img src="assets/img/garden.jpg" alt="Rosewood Manor">
+            <img src="assets/img/garden.jpg" data-i18n-attr="alt:venue.name" alt="Rosewood Manor">
           </div>
         </div>
 
-        <div class="at venue__details" style="--x:36px; --y:568px; --w:321px">
-          <h3 class="t-title-32">Rosewood Manor</h3>
-          <p class="t-eyebrow">THE COTSWOLDS, ENGLAND</p>
-          <p class="t-body t-muted">A countryside celebration among the roses.<br>Arrive 30 minutes before the ceremony.<br>Parking is available at the main entrance.</p>
+        <div class="at venue__details" style="--x:36px; --y:560px; --w:321px">
+          <h3 class="t-title-32" data-i18n="venue.name">Rosewood Manor</h3>
+          <p class="t-eyebrow" data-i18n="venue.region">THE COTSWOLDS, ENGLAND</p>
+          <p class="t-body t-muted" data-i18n="venue.notes">A countryside celebration among the roses.<br>Arrive 30 minutes before the ceremony.<br>Parking is available at the main entrance.</p>
         </div>
 
-        <div class="at actions" style="--x:26px; --y:744px; --w:341px">
+        <!-- The day itself, so the Calendar button has something to save. -->
+        <div class="at venue__date rise" style="--x:36px; --y:700px; --w:321px">
+          <i></i>
+          <span>
+            <b class="t-date-22" data-i18n="date.short">18 · 09 · 2027</b>
+            <em class="t-small" data-i18n="date.dayTime">Saturday · 4:00 PM</em>
+          </span>
+          <i></i>
+        </div>
+
+        <div class="at actions" style="--x:26px; --y:768px; --w:341px">
           <button class="btn" type="button" data-sheet="map">
-            <img src="assets/icons/ic-pin.svg" alt="" width="16" height="18">Get directions
+            <img src="assets/icons/ic-pin.svg" alt="" width="16" height="18"><span data-i18n="venue.directions">Get directions</span>
           </button>
           <button class="btn" type="button" data-sheet="calendar">
-            <img src="assets/icons/ic-calendar.svg" alt="" width="16" height="18">Calendar
+            <img src="assets/icons/ic-calendar.svg" alt="" width="16" height="18"><span data-i18n="venue.calendar">Calendar</span>
           </button>
         </div>
       </div>
@@ -187,24 +206,24 @@
     <!-- 6. Dress code -->
     <section class="screen screen--paper" id="dress">
       <div class="stage">
-        <p class="at t-eyebrow" style="--x:40px; --y:51px; --w:313px">WHAT TO WEAR</p>
+        <p class="at t-eyebrow" style="--x:40px; --y:51px; --w:313px" data-i18n="dress.eyebrow">WHAT TO WEAR</p>
         <div class="at heading heading--wide rise" style="--x:40px; --y:116px; --w:313px">
-          <h2 class="t-title">Dress code</h2>
-          <p class="t-body t-muted">An evening of timeless elegance.</p>
+          <h2 class="t-title" data-i18n="dress.title">Dress code</h2>
+          <p class="t-body t-muted" data-i18n="dress.subtitle">An evening of timeless elegance.</p>
         </div>
         <div class="at attire rise" style="--x:50px; --y:248px; --w:293px">
-          <p class="t-small t-wine">FORMAL · BLACK TIE</p>
-          <p class="t-body t-muted">Tuxedo or dark suit for gentlemen.<br>Long or cocktail dress for ladies.<br>We kindly ask you to avoid white.</p>
+          <p class="t-small t-wine" data-i18n="dress.formal">FORMAL · BLACK TIE</p>
+          <p class="t-body t-muted" data-i18n="dress.notes">Tuxedo or dark suit for gentlemen.<br>Long or cocktail dress for ladies.<br>We kindly ask you to avoid white.</p>
         </div>
         <ul class="at palette" style="--x:46.5px; --y:388px; --w:300px">
-          <li class="rise"><img src="assets/img/sw-champagne.png" alt="" width="44" height="44">CHAMPAGNE</li>
-          <li class="rise"><img src="assets/img/sw-taupe.png" alt="" width="44" height="44">TAUPE</li>
-          <li class="rise"><img src="assets/img/sw-rose.png" alt="" width="44" height="44">DUSTY ROSE</li>
-          <li class="rise"><img src="assets/img/sw-wine.png" alt="" width="44" height="44">WINE</li>
+          <li class="rise"><img src="assets/img/sw-champagne.png" alt="" width="44" height="44"><span data-i18n="dress.champagne">CHAMPAGNE</span></li>
+          <li class="rise"><img src="assets/img/sw-taupe.png" alt="" width="44" height="44"><span data-i18n="dress.taupe">TAUPE</span></li>
+          <li class="rise"><img src="assets/img/sw-rose.png" alt="" width="44" height="44"><span data-i18n="dress.rose">DUSTY ROSE</span></li>
+          <li class="rise"><img src="assets/img/sw-wine.png" alt="" width="44" height="44"><span data-i18n="dress.wine">WINE</span></li>
         </ul>
         <img class="at" src="assets/icons/bow-dress.svg" alt="" style="--x:174px; --y:479px; --w:45px">
-        <img class="at guests rise" src="assets/img/guests.jpg" alt="Guests in evening wear" style="--x:24px; --y:522px; --w:345px">
-        <p class="at t-eyebrow t-muted" style="--x:40px; --y:811px; --w:313px">A little inspiration for our evening together.</p>
+        <img class="at guests rise" src="assets/img/guests.jpg" data-i18n-attr="alt:dress.guestsAlt" alt="Guests in evening wear" style="--x:24px; --y:522px; --w:345px">
+        <p class="at t-eyebrow t-muted" style="--x:40px; --y:811px; --w:313px" data-i18n="dress.caption">A little inspiration for our evening together.</p>
       </div>
     </section>
 
@@ -212,33 +231,34 @@
     <section class="screen screen--wine" id="rsvp">
       <div class="stage rsvp">
         <div class="rsvp__heading rise">
-          <h2 class="t-script-44">Confirm your attendance</h2>
-          <p class="t-body">Please let us know<br>if you can come.</p>
+          <h2 class="t-script-44" data-i18n="rsvp.title">Confirm your attendance</h2>
+          <p class="t-body" data-i18n="rsvp.subtitle">Please let us know<br>if you can come.</p>
         </div>
 
         <div class="reply-card">
           <img class="reply-card__lace" src="assets/img/rsvp-lace.jpg" alt="">
           <form class="reply" novalidate>
             <label class="field">
-              <span class="t-label">Your first and last name</span>
-              <input class="pill" type="text" name="name" placeholder="David Miller" autocomplete="name" required>
+              <span class="t-label" data-i18n="rsvp.name">Your first and last name</span>
+              <input class="pill" type="text" name="name" autocomplete="name" required
+                     data-i18n-attr="placeholder:rsvp.namePlaceholder" placeholder="David Miller">
             </label>
             <fieldset class="field">
-              <legend class="t-label">Will you be able to come?</legend>
+              <legend class="t-label" data-i18n="rsvp.question">Will you be able to come?</legend>
               <label class="pill choice">
                 <input type="radio" name="attendance" value="yes" required>
-                <span class="choice__dot"></span>Yes, with pleasure!
+                <span class="choice__dot"></span><span data-i18n="rsvp.yes">Yes, with pleasure!</span>
               </label>
               <label class="pill choice">
                 <input type="radio" name="attendance" value="no">
-                <span class="choice__dot"></span>Unfortunately, I can't.
+                <span class="choice__dot"></span><span data-i18n="rsvp.no">Unfortunately, I can't.</span>
               </label>
             </fieldset>
             <label class="field">
-              <span class="t-label">Message (optional)</span>
+              <span class="t-label" data-i18n="rsvp.message">Message (optional)</span>
               <textarea class="pill pill--area" name="message" rows="3"></textarea>
             </label>
-            <button class="btn btn--light" type="submit">Send</button>
+            <button class="btn btn--light" type="submit" data-i18n="rsvp.send">Send</button>
           </form>
         </div>
       </div>
@@ -246,76 +266,79 @@
       <div class="stage thanks" hidden>
         <img class="at" src="assets/icons/bow-large.svg" alt="" style="--x:145px; --y:152px; --w:103px">
         <div class="at thanks__text" style="--x:32px; --y:295px; --w:329px">
-          <p class="t-eyebrow">WITH LOVE &amp; GRATITUDE</p>
-          <h2 class="t-title-40">Thank you<br>for your reply.</h2>
-          <p class="t-body t-muted">You are part of our story.<br>We are so grateful to have you in it.</p>
-          <p class="t-script-30">Charlotte &amp; James</p>
+          <p class="t-eyebrow" data-i18n="thanks.eyebrow">WITH LOVE &amp; GRATITUDE</p>
+          <h2 class="t-title-40" data-i18n="thanks.title">Thank you<br>for your reply.</h2>
+          <p class="t-body t-muted" data-i18n="thanks.body">You are part of our story.<br>We are so grateful to have you in it.</p>
+          <p class="t-script-30" data-i18n="couple.full">Charlotte &amp; James</p>
         </div>
-        <a class="at btn" href="#top" style="--x:114px; --y:701px; --w:165px">Back to invitation</a>
-        <p class="at t-eyebrow t-muted" style="--x:32px; --y:785px; --w:329px">Prototype preview · no response is sent</p>
+        <a class="at btn" href="#top" style="--x:114px; --y:701px; --w:165px" data-i18n="thanks.back">Back to invitation</a>
+        <p class="at t-eyebrow t-muted" style="--x:32px; --y:785px; --w:329px" data-i18n="thanks.note">Prototype preview · no response is sent</p>
       </div>
     </section>
 
     <!-- 8. With love: scratch the lace oval to reveal the photo -->
     <section class="screen screen--ivory" id="closing">
       <div class="stage">
-        <p class="at t-eyebrow" style="--x:30px; --y:51px; --w:333px">UNTIL THEN, WITH ALL OUR LOVE</p>
+        <p class="at t-eyebrow" style="--x:30px; --y:51px; --w:333px" data-i18n="closing.eyebrow">UNTIL THEN, WITH ALL OUR LOVE</p>
         <img class="at oval-frame" src="assets/img/oval-frame.jpg" alt="" style="--x:14px; --y:98px; --w:365px">
         <div class="scratch">
-          <img class="scratch__photo" src="assets/img/couple.png" alt="Charlotte and James">
+          <img class="scratch__photo" src="assets/img/couple.png" data-i18n-attr="alt:couple.full" alt="Charlotte and James">
           <canvas class="scratch__cover" aria-hidden="true"></canvas>
-          <p class="scratch__hint">SCRATCH TO REVEAL</p>
+          <p class="scratch__hint" data-i18n="closing.scratch">SCRATCH TO REVEAL</p>
         </div>
-        <p class="at t-script-34" style="--x:32px; --y:699px; --w:329px">Charlotte &amp; James</p>
-        <div class="at closing__footer" style="--x:32px; --y:766px; --w:329px">
-          <p class="t-eyebrow">18 SEPTEMBER 2027</p>
-          <a class="t-eyebrow t-strong" href="#top">BACK TO THE TOP&nbsp;&nbsp;↑</a>
-        </div>
+        <p class="at t-script-34" style="--x:32px; --y:690px; --w:329px" data-i18n="couple.full">Charlotte &amp; James</p>
+        <p class="at t-eyebrow" style="--x:32px; --y:744px; --w:329px" data-i18n="date.caps">18 SEPTEMBER 2027</p>
+
+        <footer class="footer">
+          <img class="footer__logo" src="assets/icons/logo.svg" alt="Invitated" width="103" height="24">
+          <a class="to-top" href="#top" data-i18n-attr="aria-label:closing.top" aria-hidden="false">↑</a>
+        </footer>
       </div>
     </section>
 
   </main>
 
   <!-- Sheets opened from the venue buttons -->
-  <div class="sheet" id="sheet-calendar" role="dialog" aria-modal="true" aria-label="Calendar" hidden>
+  <div class="sheet" id="sheet-calendar" role="dialog" aria-modal="true" data-i18n-attr="aria-label:venue.calendar" hidden>
     <div class="sheet__backdrop" data-close></div>
     <div class="sheet__panel">
       <div class="stage">
-        <button class="sheet__close" type="button" aria-label="Close" data-close><img src="assets/icons/close.svg" alt="" width="16" height="16"></button>
-        <p class="at t-month" style="--x:46px; --y:64px; --w:301px">September 2027</p>
+        <button class="sheet__close" type="button" data-close data-i18n-attr="aria-label:sheet.close"><img src="assets/icons/close.svg" alt="" width="16" height="16"></button>
+        <p class="at t-month" style="--x:46px; --y:64px; --w:301px" data-i18n="date.monthYear">September 2027</p>
         <div class="calendar">
-          <span class="calendar__dow">M</span><span class="calendar__dow">T</span><span class="calendar__dow">W</span><span class="calendar__dow">T</span><span class="calendar__dow">F</span><span class="calendar__dow">S</span><span class="calendar__dow">S</span>
+          <span class="calendar__dow" data-i18n="cal.mon">M</span><span class="calendar__dow" data-i18n="cal.tue">T</span><span class="calendar__dow" data-i18n="cal.wed">W</span><span class="calendar__dow" data-i18n="cal.thu">T</span><span class="calendar__dow" data-i18n="cal.fri">F</span><span class="calendar__dow" data-i18n="cal.sat">S</span><span class="calendar__dow" data-i18n="cal.sun">S</span>
           <span></span><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
           <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
           <span>13</span><span>14</span><span>15</span><span>16</span><span>17</span>
-          <button class="calendar__day" type="button" aria-label="Add 18 September 2027 to your calendar">18</button>
+          <button class="calendar__day" type="button" data-i18n-attr="aria-label:cal.add">18</button>
           <span>19</span>
           <span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span>
           <span>27</span><span>28</span><span>29</span><span>30</span>
         </div>
-        <p class="at t-body t-muted" style="--x:40px; --y:407px; --w:313px">Saturday, 18 September · 4:00 PM</p>
+        <p class="at t-body t-muted" style="--x:40px; --y:407px; --w:313px" data-i18n="cal.full">Saturday, 18 September · 4:00 PM</p>
         <img class="at" src="assets/icons/bow-dress.svg" alt="" style="--x:174px; --y:449px; --w:45px">
       </div>
     </div>
   </div>
 
-  <div class="sheet" id="sheet-map" role="dialog" aria-modal="true" aria-label="Find us" hidden>
+  <div class="sheet" id="sheet-map" role="dialog" aria-modal="true" data-i18n-attr="aria-label:map.title" hidden>
     <div class="sheet__backdrop" data-close></div>
     <div class="sheet__panel">
       <div class="stage">
-        <button class="sheet__close" type="button" aria-label="Close" data-close><img src="assets/icons/close.svg" alt="" width="16" height="16"></button>
-        <h2 class="at t-title-32" style="--x:46px; --y:54px; --w:301px">Find us</h2>
-        <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Rosewood+Manor+Cotswolds" target="_blank" rel="noopener" aria-label="Open Rosewood Manor in Maps">
+        <button class="sheet__close" type="button" data-close data-i18n-attr="aria-label:sheet.close"><img src="assets/icons/close.svg" alt="" width="16" height="16"></button>
+        <h2 class="at t-title-32" style="--x:46px; --y:54px; --w:301px" data-i18n="map.title">Find us</h2>
+        <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Rosewood+Manor+Cotswolds" target="_blank" rel="noopener" data-i18n-attr="aria-label:map.open">
           <img class="map__art" src="assets/icons/map.svg" alt="">
-          <span class="map__label">ROSEWOOD MANOR</span>
+          <span class="map__label" data-i18n="venue.nameCaps">ROSEWOOD MANOR</span>
         </a>
         <img class="map__pin" src="assets/icons/map-pin.svg" alt="">
-        <p class="at t-label t-wine" style="--x:36px; --y:405px; --w:321px">Rosewood Manor · The Cotswolds</p>
-        <p class="at t-small t-muted" style="--x:36px; --y:437px; --w:321px">Parking is available at the main entrance.</p>
+        <p class="at t-label t-wine" style="--x:36px; --y:405px; --w:321px" data-i18n="map.venue">Rosewood Manor · The Cotswolds</p>
+        <p class="at t-small t-muted" style="--x:36px; --y:437px; --w:321px" data-i18n="map.parking">Parking is available at the main entrance.</p>
       </div>
     </div>
   </div>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
