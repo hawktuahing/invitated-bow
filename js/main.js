@@ -195,7 +195,7 @@
   };
   const TAIL = 160; // a moment on the finished timeline before the screen lets go
   const DRAWN_BY = 0.95; // the bow keeps drawing to the end, so no stretch of scrolling is idle
-  let tempo = TEMPOS[new URLSearchParams(location.search).get("tempo")] || TEMPOS.now;
+  let tempo = TEMPOS[new URLSearchParams(location.search).get("tempo")] || TEMPOS.slow;
   let DWELL = tempo.dwell;
   let TRAVEL = tempo.travel;
   let WORDS_AT = tempo.words;
