@@ -182,9 +182,11 @@
   // pixels of scrolling — that is the stretch where the bow ties itself — then goes on. TRAVEL is
   // how much scrolling the run between two bows costs, as a share of the distance: the thread
   // covers it quickly so most of the scroll is spent on the bows.
-  const DWELL = 110;
-  const TRAVEL = 0.55;
-  const TAIL = 140; // a moment on the finished timeline before the screen lets go
+  const DWELL = 260;
+  const TRAVEL = 0.45;
+  const TAIL = 160; // a moment on the finished timeline before the screen lets go
+  const DRAWN_BY = 0.95; // the bow keeps drawing to the end, so no stretch of scrolling is idle
+  const WORDS_AT = 0.22; // and the words are up early, so they can be read while it finishes
   const clamp01 = (n) => Math.max(0, Math.min(1, n));
   const drawRibbon = () => {
     if (!ribbon.offsetHeight) return;
@@ -213,10 +215,11 @@
     ribbon.style.setProperty("--p", reduceMotion ? 1 : clamp01(thread / ribbon.offsetHeight).toFixed(4));
     for (const [i, bow] of bows.entries()) {
       const tied = reduceMotion ? 1 : ties[i];
-      bow.row.classList.toggle("is-in", tied > 0.12);
+      bow.row.classList.toggle("is-in", tied > WORDS_AT);
+      const drawn = clamp01(tied / DRAWN_BY);
       for (const [j, { path, length }] of bow.paths.entries()) {
         // Loops first, then the tails, then the knot — the order a bow is really tied in.
-        const share = clamp01((tied - j * 0.26) / 0.48);
+        const share = clamp01((drawn - j * 0.26) / 0.48);
         path.style.strokeDashoffset = length * (1 - share);
       }
     }
