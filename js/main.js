@@ -79,6 +79,19 @@
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  /* ---------- The page stops at the envelope until it is opened ---------- */
+  // A fling can't skim past the date, and there is no momentum left to swallow the tap on the
+  // envelope. Scrolling back up is left alone.
+  const dateScreen = document.getElementById("date");
+  let dateOpened = false;
+  const dateStop = () => (dateOpened ? Infinity : dateScreen.offsetTop);
+  const holdDate = () => {
+    const stop = dateStop();
+    // "instant", because the page is scrolled smoothly and this must not animate.
+    if (scrollY > stop) scrollTo({ top: stop, left: 0, behavior: "instant" });
+  };
+  addEventListener("scroll", holdDate, { passive: true });
+
   /* ---------- Smooth scrolling (desktop wheels; phones already glide) ---------- */
   const smooth = { target: scrollY, running: false };
   const maxScroll = () => document.body.scrollHeight - innerHeight;
@@ -91,7 +104,7 @@
       requestAnimationFrame(step);
     };
     const glideTo = (y) => {
-      smooth.target = Math.max(0, Math.min(y, maxScroll()));
+      smooth.target = Math.max(0, Math.min(y, maxScroll(), dateStop()));
       if (!smooth.running) { smooth.running = true; requestAnimationFrame(step); }
     };
     addEventListener("wheel", (e) => {
@@ -104,8 +117,9 @@
     window.glideTo = glideTo;
   }
   const scrollToY = (y) => {
-    if (useSmooth) window.glideTo(y);
-    else scrollTo({ top: y, behavior: reduceMotion ? "auto" : "smooth" });
+    const target = Math.min(y, dateStop());
+    if (useSmooth) window.glideTo(target);
+    else scrollTo({ top: target, behavior: reduceMotion ? "auto" : "smooth" });
   };
   // Anchors are handled here so they glide with the same easing as the wheel.
   for (const link of document.querySelectorAll('a[href^="#"]')) {
@@ -326,6 +340,7 @@
   const envelope = document.querySelector(".envelope");
   envelope.addEventListener("click", () => {
     const open = !envelope.classList.contains("is-open");
+    if (open) dateOpened = true; // once it has been opened the page carries on, even if it is shut again
     envelope.classList.toggle("is-open", open);
     envelope.closest(".screen").classList.toggle("is-open", open);
     envelope.setAttribute("aria-expanded", String(open));
