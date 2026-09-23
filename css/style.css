@@ -864,6 +864,33 @@ fieldset.field legend { margin-bottom: 10px; }
   pointer-events: none;
 }
 
+/* Tempo switcher for the programme screen; main.js only builds it for ?tempo addresses. */
+.tempos {
+  position: fixed;
+  left: 50%;
+  bottom: 10px;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  max-width: calc(100% - 16px);
+  padding: 4px;
+  translate: -50% 0;
+  border: 0.6px solid var(--line);
+  border-radius: 16px;
+  background: rgba(252, 249, 243, 0.94);
+  backdrop-filter: blur(8px);
+}
+.tempos button {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font: 400 11px/14px var(--font-sans);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.tempos button.is-on { background: var(--wine); color: var(--ivory); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: 0.01s !important; transition-delay: 0s !important; }
 }
