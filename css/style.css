@@ -466,6 +466,21 @@ p.at, h2.at, h3.at { text-align: center; }
 .screen--date.is-open .envelope__hint--open { opacity: 1; transition-delay: 0.4s; }
 
 /* ---------- 4. The celebration ---------- */
+/* The programme screen sticks to the viewport while the thread does its work; main.js sets both
+   the height of the track it scrolls through and the height of the sticky part. */
+.screen--pin {
+  overflow: visible;
+  height: calc(var(--pin-h, 852px) + var(--pin-run, 0px));
+}
+.screen--pin .pin {
+  position: sticky;
+  top: 0;
+  height: var(--pin-h, 852px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
 /* Track of the thread. Its fill is as long as the scroll has pulled it (--p, set by main.js). */
 .timeline__ribbon {
   position: absolute;

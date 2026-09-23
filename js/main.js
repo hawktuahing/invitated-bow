@@ -1,5 +1,8 @@
 (() => {
   const root = document.documentElement;
+  // A reload always starts at the gate: don't let the browser restore the old scroll position.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  scrollTo(0, 0);
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Fit the 393px mock column to narrower phones ---------- */
@@ -131,6 +134,17 @@
   const bows = moments.map((row) => ({ row, slot: row.querySelector(".moment__marker"), paths: [], knot: 0 }));
 
   // Offsets, not rects: the rows fade upwards, and that must not move where the bows sit.
+  const program = document.getElementById("program");
+  const pinStage = program.querySelector(".stage");
+
+  // The pinned screen is as tall as the viewport, with the animation's length added to the track.
+  const measurePin = () => {
+    const zoom = Math.min(Math.min(1, root.clientWidth / 393), innerHeight / 852);
+    pinStage.style.zoom = zoom.toFixed(4);
+    program.style.setProperty("--pin-h", `${innerHeight}px`);
+    program.style.setProperty("--pin-run", `${(493 + bows.length * DWELL + TAIL) * zoom}px`);
+  };
+
   const measureBows = () => {
     const stageTop = (el) => {
       let y = 0;
@@ -161,27 +175,27 @@
     drawRibbon();
   }).catch(() => {});
 
-  // The thread is pulled down to wherever this line across the screen falls. At every bow it stops
-  // for DWELL pixels of scrolling — that is the stretch where the bow ties itself — then goes on.
-  const TIE_LINE = 0.78;
+  // While the screen is pinned, the scroll pulls the thread down. At every bow it stops for DWELL
+  // pixels of scrolling — that is the stretch where the bow ties itself — then goes on.
   const DWELL = 62;
+  const TAIL = 140; // a moment on the finished timeline before the screen lets go
   const clamp01 = (n) => Math.max(0, Math.min(1, n));
   const drawRibbon = () => {
-    const track = ribbon.getBoundingClientRect();
-    if (!track.height) return;
+    if (!ribbon.offsetHeight) return;
 
     // Layout pixels, so the rows' own fade-in cannot move the measurements around.
-    const scale = track.height / ribbon.offsetHeight;
-    let pulled = (innerHeight * TIE_LINE - track.top) / scale; // how far the scroll has pulled it
+    const run = Math.max(1, program.offsetHeight - innerHeight);
+    const q = clamp01(-program.getBoundingClientRect().top / run);
+    let pulled = q * (ribbon.offsetHeight + bows.length * DWELL + TAIL);
     let thread = 0;
     let from = 0;
     const ties = [];
     for (const bow of bows) {
       const knot = bow.knot; // where this bow sits along the thread
-      const run = Math.max(0, knot - from);
-      if (pulled < run) { thread = from + Math.max(0, pulled); ties.push(0); pulled = -Infinity; continue; }
+      const gap = Math.max(0, knot - from);
+      if (pulled < gap) { thread = from + Math.max(0, pulled); ties.push(0); pulled = -Infinity; continue; }
       if (pulled === -Infinity) { ties.push(0); continue; }
-      pulled -= run;
+      pulled -= gap;
       thread = knot;
       ties.push(clamp01(pulled / DWELL));
       pulled -= DWELL;
@@ -208,7 +222,8 @@
     requestAnimationFrame(() => { ribbonQueued = false; drawRibbon(); });
   };
   addEventListener("scroll", queueRibbon, { passive: true });
-  addEventListener("resize", () => { measureBows(); queueRibbon(); });
+  addEventListener("resize", () => { measurePin(); measureBows(); queueRibbon(); });
+  measurePin();
   measureBows();
   drawRibbon();
 
