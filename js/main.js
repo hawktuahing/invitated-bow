@@ -6,7 +6,8 @@
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Fit the 393px mock column to narrower phones ---------- */
-  const fit = () => root.style.setProperty("--k", Math.min(1, root.clientWidth / 393).toFixed(4));
+  // One mock pixel, in real pixels: the 393x852 board is scaled down to fit narrow or short windows.
+  const fit = () => root.style.setProperty("--k", Math.min(1, root.clientWidth / 393, innerHeight / 852).toFixed(4));
   fit();
   addEventListener("resize", fit);
 

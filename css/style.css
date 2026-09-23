@@ -18,7 +18,6 @@
   /* Every screen in the mock is a 393px-wide phone column and everything below is placed in those
      pixels. On a narrower phone main.js sets --k below 1 and each stage is zoomed down to fit. */
   --k: 1;
-  --full-h: 852px;
 }
 
 html[lang="ru"] {
@@ -57,11 +56,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   box-shadow: 0 0 60px rgba(67, 47, 50, 0.08);
 }
 
+/* Every screen fills the window and holds the mock's board in its middle, so no screen ends
+   early with a strip of the next one showing under it. */
 .screen {
   position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
   overflow: hidden;
   isolation: isolate;
 }
+.screen--pin { display: block; } /* the pinned screen sets its own height */
 .screen--ivory { background: var(--ivory); }
 .screen--paper { background: var(--paper); }
 .screen--wine  { background: var(--wine); }
@@ -74,13 +79,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   margin: 0 auto;
   zoom: var(--k);
 }
-/* The mock draws this screen 660px tall, shorter than the rest. It keeps that layout on a board
-   of its own, centred in a screen as tall as the others. */
-.screen--date .stage {
-  height: calc(var(--full-h) / var(--k));
-  display: grid;
-  place-items: center;
-}
+/* The mock draws this screen 660px tall, shorter than the rest; the screen around it is full
+   height like every other, so the board simply sits in the middle. */
+.screen--date .stage { height: 660px; }
 .screen--date .board {
   position: relative;
   width: 393px;
@@ -99,7 +100,6 @@ p.at, h2.at, h3.at { text-align: center; }
 /* On a phone the page fills the screen edge to edge instead of the 393px column of the mock,
    and the hero takes the whole screen height. */
 @media (max-width: 600px) {
-  :root { --full-h: max(700px, 100svh); }
   .app { max-width: none; box-shadow: none; }
   .gate { width: 100%; }
 }
@@ -229,7 +229,7 @@ p.at, h2.at, h3.at { text-align: center; }
 
 /* ---------- 1. Invitation ---------- */
 .screen--hero { background: var(--blush); }
-.screen--hero .stage { height: calc(var(--full-h) / var(--k)); }
+.screen--hero .stage { height: calc(100svh / var(--k)); } /* the art bleeds to the window edges */
 
 .hero__garden {
   position: absolute;
@@ -739,12 +739,14 @@ fieldset.field legend { margin-bottom: 10px; }
 .scratch.is-clear .scratch__hint { opacity: 0; }
 .scratch.is-clear .scratch__cover { opacity: 0; pointer-events: none; }
 
-/* Footer bar, like the letter site's: logo on the left, back to the top on the right. */
+/* Footer bar, like the letter site's: logo on the left, back to the top on the right. It hangs off
+   the screen rather than the board, so it stays at the bottom of the window. */
 .footer {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 50%;
   bottom: 0;
+  width: min(100%, 393px);
+  translate: -50% 0;
   height: 72px;
   padding: 14px 24px;
   display: flex;
