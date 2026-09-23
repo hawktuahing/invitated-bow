@@ -2,9 +2,8 @@
 <g id="Wine ribbon milestone" clip-path="url(#clip0_0_31)">
 <path id="Vector" d="M24 0H0V40H24V0Z" fill="#F7F1E7" fill-opacity="0.01"/>
 <g id="Group">
-<path id="Vector_2" d="M12 12C8 7 2 4 1 8C2.98023e-08 12 6 15 12 12ZM12 12C17 6 23 5 23 9C23 13 17 14 12 12Z" stroke="#6B303F" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_3" d="M11 13C5 19 11 25 7 35L11 31C14 24 9 19 12 14M13 13C19 20 13 24 18 31L16 24C17 19 16 16 13 13Z" stroke="#6B303F" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_4" d="M12 14.2C12.7732 14.2 13.4 13.4389 13.4 12.5C13.4 11.5611 12.7732 10.8 12 10.8C11.2268 10.8 10.6 11.5611 10.6 12.5C10.6 13.4389 11.2268 14.2 12 14.2Z" stroke="#6B303F" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Ribbon end / left" d="M12 12C8 7 2 4 1 8C2.98023e-08 12 6 15 12 12ZM11 13C5 19 11 25 7 35L11 31C14 24 9 19 12 14" stroke="#6B303F" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Ribbon end / right with knot" d="M12 12C17 6 23 5 23 9C23 13 17 14 12 12ZM13 13C19 20 13 24 18 31L16 24C17 19 16 16 13 13ZM12 14.2C12.7732 14.2 13.4 13.4389 13.4 12.5C13.4 11.5611 12.7732 10.8 12 10.8C11.2268 10.8 10.6 11.5611 10.6 12.5C10.6 13.4389 11.2268 14.2 12 14.2Z" stroke="#6B303F" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 </g>
 <defs>

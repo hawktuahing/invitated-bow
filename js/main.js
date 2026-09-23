@@ -137,12 +137,15 @@
   const program = document.getElementById("program");
   const pinStage = program.querySelector(".stage");
 
+  // How much scrolling the whole timeline takes, in stage pixels.
+  const scrollSpan = () => ribbon.offsetHeight * TRAVEL + bows.length * (DWELL + HOLD) + TAIL;
+
   // The pinned screen is as tall as the viewport, with the animation's length added to the track.
   const measurePin = () => {
     const zoom = Math.min(Math.min(1, root.clientWidth / 393), innerHeight / 852);
     pinStage.style.zoom = zoom.toFixed(4);
     program.style.setProperty("--pin-h", `${innerHeight}px`);
-    program.style.setProperty("--pin-run", `${(493 + bows.length * DWELL + TAIL) * zoom}px`);
+    program.style.setProperty("--pin-run", `${scrollSpan() * zoom}px`);
   };
 
   const measureBows = () => {
@@ -175,10 +178,13 @@
     drawRibbon();
   }).catch(() => {});
 
-  // While the screen is pinned, the scroll pulls the thread down. At every bow it stops for DWELL
-  // pixels of scrolling — that is the stretch where the bow ties itself — then goes on.
-  const DWELL = 62;
-  const TAIL = 140; // a moment on the finished timeline before the screen lets go
+  // While the screen is pinned, the scroll pulls the thread down. Nearly all of that scrolling is
+  // spent tying: knot (DWELL) → the row's words (HOLD) → a quick run to the next bow (TRAVEL of
+  // the distance between them) → the next knot.
+  const DWELL = 170;
+  const HOLD = 55;
+  const TRAVEL = 0.22;
+  const TAIL = 130; // a moment on the finished timeline before the screen lets go
   const clamp01 = (n) => Math.max(0, Math.min(1, n));
   const drawRibbon = () => {
     if (!ribbon.offsetHeight) return;
@@ -186,31 +192,32 @@
     // Layout pixels, so the rows' own fade-in cannot move the measurements around.
     const run = Math.max(1, program.offsetHeight - innerHeight);
     const q = clamp01(-program.getBoundingClientRect().top / run);
-    let pulled = q * (ribbon.offsetHeight + bows.length * DWELL + TAIL);
+    let pulled = q * scrollSpan();
     let thread = 0;
     let from = 0;
     const ties = [];
     for (const bow of bows) {
       const knot = bow.knot; // where this bow sits along the thread
-      const gap = Math.max(0, knot - from);
-      if (pulled < gap) { thread = from + Math.max(0, pulled); ties.push(0); pulled = -Infinity; continue; }
+      const cost = Math.max(0, knot - from) * TRAVEL; // the quick run down to it
+      if (pulled < cost) { thread = from + Math.max(0, pulled) / TRAVEL; ties.push(0); pulled = -Infinity; continue; }
       if (pulled === -Infinity) { ties.push(0); continue; }
-      pulled -= gap;
+      pulled -= cost;
       thread = knot;
       ties.push(clamp01(pulled / DWELL));
-      pulled -= DWELL;
+      pulled -= DWELL + HOLD; // the knot, then a beat for the row's words
       from = knot;
       if (pulled < 0) pulled = -Infinity;
     }
-    if (pulled > 0) thread = from + pulled;
+    if (pulled > 0) thread = from + pulled / TRAVEL;
 
     ribbon.style.setProperty("--p", reduceMotion ? 1 : clamp01(thread / ribbon.offsetHeight).toFixed(4));
     for (const [i, bow] of bows.entries()) {
       const tied = reduceMotion ? 1 : ties[i];
-      bow.row.classList.toggle("is-in", tied > 0.12);
+      // The words follow the finished knot rather than accompany it.
+      bow.row.classList.toggle("is-in", tied > 0.88);
       for (const [j, { path, length }] of bow.paths.entries()) {
-        // Loops first, then the tails, then the knot — the order a bow is really tied in.
-        const share = clamp01((tied - j * 0.26) / 0.48);
+        // Two strokes, the way a bow is really tied: one ribbon end, then the other pulling the knot.
+        const share = clamp01((tied - j * 0.46) / 0.54);
         path.style.strokeDashoffset = length * (1 - share);
       }
     }
