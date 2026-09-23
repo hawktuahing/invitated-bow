@@ -466,17 +466,20 @@ p.at, h2.at, h3.at { text-align: center; }
 .screen--date.is-open .envelope__hint--open { opacity: 1; transition-delay: 0.4s; }
 
 /* ---------- 4. The celebration ---------- */
+/* Track of the thread. Its fill is as long as the scroll has pulled it (--p, set by main.js). */
 .timeline__ribbon {
   position: absolute;
   left: 169.5px;
   top: 253px;
   width: 1px;
   height: 493px;
-  background: var(--wine);
-  transform-origin: top;
 }
-.is-animated .timeline__ribbon { transform: scaleY(0); }
-.is-animated .timeline__ribbon.is-in { transform: none; transition: transform 2.2s cubic-bezier(0.45, 0, 0.25, 1); }
+.timeline__ribbon i {
+  display: block;
+  width: 100%;
+  height: calc(100% * var(--p, 1));
+  background: var(--wine);
+}
 
 .timeline {
   position: absolute;
@@ -495,7 +498,27 @@ p.at, h2.at, h3.at { text-align: center; }
   column-gap: 16px;
 }
 .moment__icon { margin: 18px 0 0 23px; width: 64px; height: 64px; }
-.moment__marker { margin-top: 15px; width: 24px; height: 40px; }
+.moment__marker {
+  margin-top: 15px;
+  width: 24px;
+  height: 40px;
+  /* Until main.js swaps in the inline drawing, the flat icon stands in. */
+  background: url("../assets/icons/ribbon-marker.svg") center / contain no-repeat;
+}
+.moment__marker.is-drawn { background: none; }
+.moment__marker svg { width: 24px; height: 40px; overflow: visible; }
+/* The icon and the words arrive as the bow beside them is tied (main.js adds .is-in). */
+.is-animated .moment__icon,
+.is-animated .moment__text {
+  opacity: 0;
+  translate: 0 14px;
+}
+.is-animated .moment.is-in .moment__icon,
+.is-animated .moment.is-in .moment__text {
+  opacity: 1;
+  translate: none;
+  transition: opacity 0.7s ease, translate 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
 .moment__text {
   display: flex;
   flex-direction: column;

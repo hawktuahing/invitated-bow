@@ -122,7 +122,95 @@
       riseObserver.unobserve(entry.target);
     }
   }, { rootMargin: "0px 0px -12% 0px" });
-  document.querySelectorAll(".rise, .timeline__ribbon").forEach((el) => riseObserver.observe(el));
+  // The programme rows come in with their own bow instead, so they stay out of the observer.
+  document.querySelectorAll(".rise:not(.moment)").forEach((el) => riseObserver.observe(el));
+
+  /* ---------- 4. The thread that ties itself into bows ---------- */
+  const ribbon = document.querySelector(".timeline__ribbon");
+  const moments = [...document.querySelectorAll(".moment")];
+  const bows = moments.map((row) => ({ row, slot: row.querySelector(".moment__marker"), paths: [], knot: 0 }));
+
+  // Offsets, not rects: the rows fade upwards, and that must not move where the bows sit.
+  const measureBows = () => {
+    const stageTop = (el) => {
+      let y = 0;
+      for (let node = el; node && !node.classList.contains("stage"); node = node.offsetParent) y += node.offsetTop;
+      return y;
+    };
+    const ribbonTop = stageTop(ribbon);
+    for (const bow of bows) bow.knot = stageTop(bow.slot) + 12.5 - ribbonTop; // 12.5 = the knot in the icon
+  };
+
+  // One fetch for the drawing every bow shares; if it fails the flat icon simply stays.
+  fetch("assets/icons/ribbon-marker.svg").then((r) => r.text()).then((markup) => {
+    const template = document.createElement("div");
+    template.innerHTML = markup;
+    const svg = template.querySelector("svg");
+    for (const bow of bows) {
+      const copy = svg.cloneNode(true);
+      bow.slot.replaceChildren(copy);
+      bow.slot.classList.add("is-drawn");
+      bow.paths = [...copy.querySelectorAll("path[stroke]")].map((path) => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+        return { path, length };
+      });
+    }
+    measureBows();
+    drawRibbon();
+  }).catch(() => {});
+
+  // The thread is pulled down to wherever this line across the screen falls. At every bow it stops
+  // for DWELL pixels of scrolling — that is the stretch where the bow ties itself — then goes on.
+  const TIE_LINE = 0.78;
+  const DWELL = 62;
+  const clamp01 = (n) => Math.max(0, Math.min(1, n));
+  const drawRibbon = () => {
+    const track = ribbon.getBoundingClientRect();
+    if (!track.height) return;
+
+    // Layout pixels, so the rows' own fade-in cannot move the measurements around.
+    const scale = track.height / ribbon.offsetHeight;
+    let pulled = (innerHeight * TIE_LINE - track.top) / scale; // how far the scroll has pulled it
+    let thread = 0;
+    let from = 0;
+    const ties = [];
+    for (const bow of bows) {
+      const knot = bow.knot; // where this bow sits along the thread
+      const run = Math.max(0, knot - from);
+      if (pulled < run) { thread = from + Math.max(0, pulled); ties.push(0); pulled = -Infinity; continue; }
+      if (pulled === -Infinity) { ties.push(0); continue; }
+      pulled -= run;
+      thread = knot;
+      ties.push(clamp01(pulled / DWELL));
+      pulled -= DWELL;
+      from = knot;
+      if (pulled < 0) pulled = -Infinity;
+    }
+    if (pulled > 0) thread = from + pulled;
+
+    ribbon.style.setProperty("--p", reduceMotion ? 1 : clamp01(thread / ribbon.offsetHeight).toFixed(4));
+    for (const [i, bow] of bows.entries()) {
+      const tied = reduceMotion ? 1 : ties[i];
+      bow.row.classList.toggle("is-in", tied > 0.12);
+      for (const [j, { path, length }] of bow.paths.entries()) {
+        // Loops first, then the tails, then the knot — the order a bow is really tied in.
+        const share = clamp01((tied - j * 0.26) / 0.48);
+        path.style.strokeDashoffset = length * (1 - share);
+      }
+    }
+  };
+  let ribbonQueued = false;
+  const queueRibbon = () => {
+    if (ribbonQueued) return;
+    ribbonQueued = true;
+    requestAnimationFrame(() => { ribbonQueued = false; drawRibbon(); });
+  };
+  addEventListener("scroll", queueRibbon, { passive: true });
+  addEventListener("resize", () => { measureBows(); queueRibbon(); });
+  measureBows();
+  drawRibbon();
 
   /* ---------- Music: a real toggle, with a fade and no pretending when there is no track ---------- */
   const music = document.querySelector(".music");
