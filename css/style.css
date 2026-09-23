@@ -74,7 +74,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   margin: 0 auto;
   zoom: var(--k);
 }
-.screen--date .stage { height: 660px; }
+/* The mock draws this screen 660px tall, shorter than the rest. It keeps that layout on a board
+   of its own, centred in a screen as tall as the others. */
+.screen--date .stage {
+  height: calc(var(--full-h) / var(--k));
+  display: grid;
+  place-items: center;
+}
+.screen--date .board {
+  position: relative;
+  width: 393px;
+  height: 660px;
+}
 
 /* Absolutely placed block: --x / --y / --w come straight from the mock. */
 .at {
