@@ -178,27 +178,17 @@
     drawRibbon();
   }).catch(() => {});
 
-  // While the screen is pinned, the scroll pulls the thread down. At every bow it stops for DWELL
-  // pixels of scrolling — that is the stretch where the bow ties itself — then goes on. TRAVEL is
-  // how much scrolling the run between two bows costs, as a share of the distance: the thread
-  // covers it quickly so most of the scroll is spent on the bows.
-  // Five tempos to try on. Add ?tempo to the address to get a switcher for them on the page.
-  //   dwell  — pixels of scrolling one bow is tied over
-  //   travel — share of the distance to the next bow that costs scrolling (lower = quicker run)
-  //   words  — how far into the bow's stretch its time and title turn up
-  const TEMPOS = {
-    brisk: { name: "Бодрый", dwell: 160, travel: 0.45, words: 0.3 },
-    now:   { name: "Сейчас", dwell: 260, travel: 0.45, words: 0.22 },
-    calm:  { name: "Спокойный", dwell: 360, travel: 0.4, words: 0.18 },
-    read:  { name: "Текст сразу", dwell: 300, travel: 0.6, words: 0.08 },
-    slow:  { name: "Медленный", dwell: 480, travel: 0.3, words: 0.15 },
-  };
+  // While the screen is pinned, the scroll pulls the thread down, stopping at every bow for the
+  // stretch where it ties itself. Pacing, in stage pixels of scrolling:
+  //   DWELL    — how much scrolling one bow is tied over
+  //   TRAVEL   — share of the distance to the next bow that costs scrolling (lower = quicker run)
+  //   WORDS_AT — how far into a bow's stretch its time and title turn up, so they can be read
+  //              while the bow finishes rather than after it
+  const DWELL = 480;
+  const TRAVEL = 0.3;
+  const WORDS_AT = 0.15;
   const TAIL = 160; // a moment on the finished timeline before the screen lets go
   const DRAWN_BY = 0.95; // the bow keeps drawing to the end, so no stretch of scrolling is idle
-  let tempo = TEMPOS[new URLSearchParams(location.search).get("tempo")] || TEMPOS.slow;
-  let DWELL = tempo.dwell;
-  let TRAVEL = tempo.travel;
-  let WORDS_AT = tempo.words;
   const clamp01 = (n) => Math.max(0, Math.min(1, n));
   const drawRibbon = () => {
     if (!ribbon.offsetHeight) return;
@@ -248,31 +238,6 @@
   measureBows();
   drawRibbon();
 
-  // Tempo switcher: only ever shown when the address carries ?tempo, never to a guest.
-  if (new URLSearchParams(location.search).has("tempo")) {
-    const panel = document.createElement("div");
-    panel.className = "tempos";
-    for (const [key, preset] of Object.entries(TEMPOS)) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = preset.name;
-      button.className = preset === tempo ? "is-on" : "";
-      button.addEventListener("click", () => {
-        tempo = preset;
-        DWELL = preset.dwell;
-        TRAVEL = preset.travel;
-        WORDS_AT = preset.words;
-        for (const other of panel.children) other.className = "";
-        button.className = "is-on";
-        measurePin();
-        measureBows();
-        scrollTo(0, program.offsetTop);
-        drawRibbon();
-      });
-      panel.appendChild(button);
-    }
-    document.body.appendChild(panel);
-  }
 
   /* ---------- Music: a real toggle, with a fade and no pretending when there is no track ---------- */
   const music = document.querySelector(".music");
