@@ -6,8 +6,16 @@
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Fit the 393px mock column to narrower phones ---------- */
-  // One mock pixel, in real pixels: the 393x852 board is scaled down to fit narrow or short windows.
-  const fit = () => root.style.setProperty("--k", Math.min(1, root.clientWidth / 393, innerHeight / 852).toFixed(4));
+  // One mock pixel, in real pixels. A phone gets the board stretched to its full width, so no
+  // screen ends in a strip of bare paper; a browser window keeps the mock's own size at most.
+  // clientHeight, not innerHeight: on iOS the latter shrinks and grows with the address bar, and
+  // everything would rescale mid-scroll.
+  const fit = () => {
+    const width = root.clientWidth;
+    const portraitPhone = width <= 600 && root.clientHeight > width;
+    const k = portraitPhone ? width / 393 : Math.min(1, width / 393, root.clientHeight / 852);
+    root.style.setProperty("--k", k.toFixed(4));
+  };
   fit();
   addEventListener("resize", fit);
 
@@ -186,17 +194,15 @@
 
   // Offsets, not rects: the rows fade upwards, and that must not move where the bows sit.
   const program = document.getElementById("program");
-  const pinStage = program.querySelector(".stage");
 
   // How much scrolling the whole timeline takes, in stage pixels.
   const scrollSpan = () => ribbon.offsetHeight * TRAVEL + bows.length * DWELL + TAIL;
 
-  // The pinned screen is as tall as the viewport, with the animation's length added to the track.
+  // The pinned screen is as tall as the viewport (in CSS, so the address bar can't move it) with
+  // the animation's length added to the track below it.
   const measurePin = () => {
-    const zoom = Math.min(Math.min(1, root.clientWidth / 393), innerHeight / 852);
-    pinStage.style.zoom = zoom.toFixed(4);
-    program.style.setProperty("--pin-h", `${innerHeight}px`);
-    program.style.setProperty("--pin-run", `${scrollSpan() * zoom}px`);
+    const k = parseFloat(getComputedStyle(root).getPropertyValue("--k")) || 1;
+    program.style.setProperty("--pin-run", `${scrollSpan() * k}px`);
   };
 
   const measureBows = () => {
