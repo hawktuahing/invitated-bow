@@ -21,38 +21,39 @@
 
   /* ---------- Preloader: the gate only shows once its art is really there ---------- */
   const loader = document.getElementById("loader");
+  // Only what the gate itself shows. The clip, the untied still and the screens below stream in
+  // while the guest is still looking at the sealed bow.
   const FIRST_SCREEN = [
     "assets/img/gate-tied.jpg",
-    "assets/img/gate-untied.jpg",
     "assets/img/seal-left.png",
     "assets/img/seal-right.png",
-    "assets/img/garden.jpg",
   ];
   let loadedCount = 0;
-  const steps = FIRST_SCREEN.length + 2; // the images, the gate's clip, the fonts
+  const steps = FIRST_SCREEN.length + 1; // the gate's own art, plus the fonts
   const bump = () => loader.style.setProperty("--load", (++loadedCount / steps).toFixed(3));
   const waitForImage = (src) => new Promise((done) => {
     const probe = new Image();
     probe.onload = probe.onerror = () => { bump(); done(); };
     probe.src = src; // already requested by the markup, so this resolves off the same load
   });
-  const clipReady = new Promise((done) => {
-    const clip = document.querySelector(".gate__clip");
-    if (!clip) return done();
-    if (clip.readyState >= 3) return done();
-    clip.addEventListener("canplaythrough", done, { once: true });
-    clip.addEventListener("error", done, { once: true });
-  });
-  const firstScreenReady = Promise.all([
-    ...FIRST_SCREEN.map(waitForImage),
-    clipReady.then(bump),
-    (document.fonts?.ready ?? Promise.resolve()).then(bump),
-  ]);
+  // The gate carries no type, so the fonts are given a moment out of politeness and then left to
+  // arrive on their own rather than holding the invitation shut.
+  const fontsSettled = Promise.race([
+    (document.fonts?.ready ?? Promise.resolve()),
+    new Promise((done) => setTimeout(done, 2000)),
+  ]).then(bump);
+  const firstScreenReady = Promise.all([...FIRST_SCREEN.map(waitForImage), fontsSettled]);
   // Never hold the page hostage to a slow asset: after 8s the invitation opens regardless.
   Promise.race([firstScreenReady, new Promise((done) => setTimeout(done, 8000))]).then(() => {
     loader.style.setProperty("--load", "1");
     loader.classList.add("is-done");
     setTimeout(() => loader.remove(), 800);
+    // Only now does the untying clip start downloading: it is not needed until the gate is tapped,
+    // and holding it back keeps the first screen light on a phone.
+    const clip = document.querySelector(".gate__clip");
+    if (clip) { clip.preload = "auto"; clip.load(); }
+    // Same for the untied still: it is what the clip hands over to, long after this moment.
+    for (const art of document.querySelectorAll(".gate__art[data-src]")) art.src = art.dataset.src;
   });
 
   /* ---------- Language ---------- */
@@ -62,9 +63,20 @@
     t(key) { return (window.I18N[this.current] || {})[key] ?? window.I18N.en[key] ?? key; },
   };
 
+  // Russian needs a script face with Cyrillic; it is fetched the moment Russian is chosen.
+  const loadRussianScript = () => {
+    if (document.getElementById("marck")) return;
+    const link = document.createElement("link");
+    link.id = "marck";
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Marck+Script&display=swap";
+    document.head.appendChild(link);
+  };
+
   const applyLang = (code) => {
     lang.current = LANGS.includes(code) ? code : "en";
     root.lang = lang.current;
+    if (lang.current === "ru") loadRussianScript();
     document.title = lang.t("meta.title");
     for (const el of document.querySelectorAll("[data-i18n]")) {
       const value = lang.t(el.dataset.i18n);
@@ -124,17 +136,16 @@
   onScroll();
 
   /* ---------- The page stops at the envelope until it is opened ---------- */
-  // A fling can't skim past the date, and there is no momentum left to swallow the tap on the
-  // envelope. Scrolling back up is left alone.
-  const dateScreen = document.getElementById("date");
-  let dateOpened = false;
-  const dateStop = () => (dateOpened ? Infinity : dateScreen.offsetTop);
-  const holdDate = () => {
-    const stop = dateStop();
-    // "instant", because the page is scrolled smoothly and this must not animate.
-    if (scrollY > stop) scrollTo({ top: stop, left: 0, behavior: "instant" });
+  // Rather than pulling the scroll back, which fights a phone's momentum, the screens below the
+  // envelope are taken out of the document, so the page genuinely ends there.
+  root.classList.add("is-held");
+  const releaseAfterDate = () => {
+    if (!root.classList.contains("is-held")) return;
+    root.classList.remove("is-held");
+    measurePin();   // those screens had no size while they were out of the document
+    measureBows();
+    drawRibbon();
   };
-  addEventListener("scroll", holdDate, { passive: true });
 
   /* ---------- Smooth scrolling (desktop wheels; phones already glide) ---------- */
   const smooth = { target: scrollY, running: false };
@@ -148,7 +159,7 @@
       requestAnimationFrame(step);
     };
     const glideTo = (y) => {
-      smooth.target = Math.max(0, Math.min(y, maxScroll(), dateStop()));
+      smooth.target = Math.max(0, Math.min(y, maxScroll()));
       if (!smooth.running) { smooth.running = true; requestAnimationFrame(step); }
     };
     addEventListener("wheel", (e) => {
@@ -161,9 +172,8 @@
     window.glideTo = glideTo;
   }
   const scrollToY = (y) => {
-    const target = Math.min(y, dateStop());
-    if (useSmooth) window.glideTo(target);
-    else scrollTo({ top: target, behavior: reduceMotion ? "auto" : "smooth" });
+    if (useSmooth) window.glideTo(y);
+    else scrollTo({ top: y, behavior: reduceMotion ? "auto" : "smooth" });
   };
   // Anchors are handled here so they glide with the same easing as the wheel.
   for (const link of document.querySelectorAll('a[href^="#"]')) {
@@ -407,7 +417,7 @@
   const envelope = document.querySelector(".envelope");
   envelope.addEventListener("click", () => {
     const open = !envelope.classList.contains("is-open");
-    if (open) dateOpened = true; // once it has been opened the page carries on, even if it is shut again
+    if (open) releaseAfterDate(); // once opened the page carries on, even if it is shut again
     envelope.classList.toggle("is-open", open);
     envelope.closest(".screen").classList.toggle("is-open", open);
     envelope.setAttribute("aria-expanded", String(open));

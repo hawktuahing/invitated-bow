@@ -104,6 +104,10 @@ p.at, h2.at, h3.at { text-align: center; }
   .gate { width: 100%; }
 }
 
+/* Until the envelope is opened the page simply ends at it: the screens below are out of the
+   document, so the phone stops there by itself instead of being pulled back by script. */
+.is-held #date ~ .screen { display: none; }
+
 /* Blocks lift into place the first time they are scrolled to. Nothing is hidden unless main.js
    has said it will bring it back. `translate` so it composes with any transform. */
 .is-animated .rise { opacity: 0; translate: 0 16px; }

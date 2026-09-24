@@ -7,8 +7,8 @@
   <title data-i18n="meta.title">Charlotte &amp; James — Wedding Invitation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Pinyon Script has no Cyrillic, so Russian falls back to Marck Script (see html[lang=ru]). -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500&family=Pinyon+Script&family=Marck+Script&display=swap">
+  <!-- Marck Script is fetched by main.js only when Russian is chosen: Pinyon has no Cyrillic. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500&family=Pinyon+Script&display=swap">
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="assets/icons/favicon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -28,13 +28,13 @@
   <div class="gate" id="gate" role="button" tabindex="0" data-i18n-attr="aria-label:gate.open">
     <div class="gate__leaf gate__leaf--left">
       <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="" fetchpriority="high">
-      <img class="gate__art gate__art--untied" src="assets/img/gate-untied.jpg" alt="">
+      <img class="gate__art gate__art--untied" data-src="assets/img/gate-untied.jpg" alt="">
     </div>
     <div class="gate__leaf gate__leaf--right">
       <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="" fetchpriority="high">
-      <img class="gate__art gate__art--untied" src="assets/img/gate-untied.jpg" alt="">
+      <img class="gate__art gate__art--untied" data-src="assets/img/gate-untied.jpg" alt="">
     </div>
-    <video class="gate__clip" src="assets/vids/gate.mp4" muted playsinline preload="auto" disablepictureinpicture></video>
+    <video class="gate__clip" src="assets/vids/gate.mp4" muted playsinline preload="none" disablepictureinpicture></video>
     <div class="gate__seal">
       <img class="gate__half gate__half--left" src="assets/img/seal-left.png" alt="">
       <img class="gate__half gate__half--right" src="assets/img/seal-right.png" alt="">
@@ -47,9 +47,9 @@
     <div class="topbar__tools">
       <div class="lang">
         <button class="lang__button" type="button" aria-expanded="false" aria-haspopup="listbox" data-i18n-attr="aria-label:lang.label">
-          <img src="assets/icons/globe.svg" alt="" width="14" height="14">
+          <img loading="lazy" decoding="async" src="assets/icons/globe.svg" alt="" width="14" height="14">
           <span class="lang__code">EN</span>
-          <img class="lang__chevron" src="assets/icons/chevron-down.svg" alt="" width="8" height="4">
+          <img loading="lazy" decoding="async" class="lang__chevron" src="assets/icons/chevron-down.svg" alt="" width="8" height="4">
         </button>
         <ul class="lang__menu" role="listbox" hidden>
           <li><button type="button" role="option" data-lang="en" aria-selected="true">English</button></li>
@@ -58,8 +58,8 @@
         </ul>
       </div>
       <button class="sound" type="button" aria-pressed="false" data-i18n-attr="aria-label:sound.label">
-        <img class="sound__off" src="assets/icons/sound-off.svg" alt="" width="24" height="24">
-        <img class="sound__on" src="assets/icons/sound-on.svg" alt="" width="24" height="24">
+        <img loading="lazy" decoding="async" class="sound__off" src="assets/icons/sound-off.svg" alt="" width="24" height="24">
+        <img loading="lazy" decoding="async" class="sound__on" src="assets/icons/sound-on.svg" alt="" width="24" height="24">
       </button>
     </div>
   </header>
@@ -92,8 +92,8 @@
         <a class="scroll-down" href="#letter">
           <span class="t-button" data-i18n="hero.scroll">Scroll down</span>
           <span class="scroll-down__arrows" aria-hidden="true">
-            <img src="assets/icons/arrow-down.svg" alt="" width="14" height="10">
-            <img src="assets/icons/arrow-down.svg" alt="" width="14" height="10">
+            <img loading="lazy" decoding="async" src="assets/icons/arrow-down.svg" alt="" width="14" height="10">
+            <img loading="lazy" decoding="async" src="assets/icons/arrow-down.svg" alt="" width="14" height="10">
           </span>
         </a>
       </div>
@@ -103,8 +103,8 @@
     <section class="screen screen--ivory" id="letter">
       <div class="stage">
         <div class="letter rise">
-          <img class="letter__lace" src="assets/img/letter-lace.jpg" alt="">
-          <img class="letter__bow" src="assets/icons/bow.svg" alt="" width="55" height="30">
+          <img class="letter__lace" src="assets/img/letter-lace.jpg" loading="lazy" decoding="async" alt="">
+          <img loading="lazy" decoding="async" class="letter__bow" src="assets/icons/bow.svg" alt="" width="55" height="30">
           <div class="letter__content">
             <h2 class="t-script-42" data-i18n="letter.greeting">Dear friends,</h2>
             <p class="t-small t-ink letter__text" data-i18n="letter.body">We are delighted to invite you to share one of the most important days of our lives with us. Your presence will make this day truly special</p>
@@ -134,7 +134,7 @@
 
         <p class="at t-body t-muted envelope__hint envelope__hint--closed" style="--x:32px; --y:574px; --w:329px" data-i18n="save.hintClosed">Open the envelope<br>to save our date.</p>
         <p class="at t-body t-muted envelope__hint envelope__hint--open" style="--x:32px; --y:574px; --w:329px" data-i18n="save.hintOpen">Join us from 3:30 PM<br>at Rosewood Manor.</p>
-        <img class="at" src="assets/icons/bow-small.svg" alt="" style="--x:174.5px; --y:622px; --w:44px">
+        <img loading="lazy" decoding="async" class="at" src="assets/icons/bow-small.svg" alt="" style="--x:174.5px; --y:622px; --w:44px">
       </div>
       </div>
     </section>
@@ -153,27 +153,27 @@
         <div class="timeline__ribbon"><i></i></div>
         <ol class="timeline">
           <li class="moment">
-            <img class="moment__icon" src="assets/icons/ic-arrival.svg" alt="" width="64" height="64">
+            <img loading="lazy" decoding="async" class="moment__icon" src="assets/icons/ic-arrival.svg" alt="" width="64" height="64">
             <span class="moment__marker" aria-hidden="true"></span>
             <p class="moment__text"><span class="t-time" data-i18n="program.t1">3:30 PM</span><span class="t-event" data-i18n="program.e1">Guest arrival</span></p>
           </li>
           <li class="moment">
-            <img class="moment__icon" src="assets/icons/ic-photo.svg" alt="" width="64" height="64">
+            <img loading="lazy" decoding="async" class="moment__icon" src="assets/icons/ic-photo.svg" alt="" width="64" height="64">
             <span class="moment__marker" aria-hidden="true"></span>
             <p class="moment__text"><span class="t-time" data-i18n="program.t2">4:00 PM</span><span class="t-event" data-i18n="program.e2">Photoshoot</span></p>
           </li>
           <li class="moment">
-            <img class="moment__icon" src="assets/icons/ic-celebration.svg" alt="" width="64" height="64">
+            <img loading="lazy" decoding="async" class="moment__icon" src="assets/icons/ic-celebration.svg" alt="" width="64" height="64">
             <span class="moment__marker" aria-hidden="true"></span>
             <p class="moment__text"><span class="t-time" data-i18n="program.t3">5:00 PM</span><span class="t-event" data-i18n="program.e3">The start of<br>the celebration</span></p>
           </li>
           <li class="moment">
-            <img class="moment__icon" src="assets/icons/ic-wedding.svg" alt="" width="64" height="64">
+            <img loading="lazy" decoding="async" class="moment__icon" src="assets/icons/ic-wedding.svg" alt="" width="64" height="64">
             <span class="moment__marker" aria-hidden="true"></span>
             <p class="moment__text"><span class="t-time" data-i18n="program.t4">6:00 PM</span><span class="t-event" data-i18n="program.e4">Wedding</span></p>
           </li>
           <li class="moment">
-            <img class="moment__icon" src="assets/icons/ic-stars.svg" alt="" width="64" height="64">
+            <img loading="lazy" decoding="async" class="moment__icon" src="assets/icons/ic-stars.svg" alt="" width="64" height="64">
             <span class="moment__marker" aria-hidden="true"></span>
             <p class="moment__text"><span class="t-time" data-i18n="program.t5">8:00 PM</span><span class="t-event" data-i18n="program.e5">Under the stars</span></p>
           </li>
@@ -189,9 +189,9 @@
         <h2 class="at t-title rise" style="--x:32px; --y:109px; --w:329px" data-i18n="venue.title">Meet us in the garden.</h2>
 
         <div class="venue rise">
-          <img class="venue__frame" src="assets/img/venue-frame.jpg" alt="">
+          <img class="venue__frame" src="assets/img/venue-frame.jpg" loading="lazy" decoding="async" alt="">
           <div class="venue__window">
-            <img src="assets/img/garden.jpg" data-i18n-attr="alt:venue.name" alt="Rosewood Manor">
+            <img src="assets/img/garden.jpg" decoding="async" data-i18n-attr="alt:venue.name" alt="Rosewood Manor">
           </div>
         </div>
 
@@ -213,10 +213,10 @@
 
         <div class="at actions" style="--x:26px; --y:768px; --w:341px">
           <button class="btn" type="button" data-sheet="map">
-            <img src="assets/icons/ic-pin.svg" alt="" width="16" height="18"><span data-i18n="venue.directions">Get directions</span>
+            <img loading="lazy" decoding="async" src="assets/icons/ic-pin.svg" alt="" width="16" height="18"><span data-i18n="venue.directions">Get directions</span>
           </button>
           <button class="btn" type="button" data-sheet="calendar">
-            <img src="assets/icons/ic-calendar.svg" alt="" width="16" height="18"><span data-i18n="venue.calendar">Calendar</span>
+            <img loading="lazy" decoding="async" src="assets/icons/ic-calendar.svg" alt="" width="16" height="18"><span data-i18n="venue.calendar">Calendar</span>
           </button>
         </div>
       </div>
@@ -235,13 +235,13 @@
           <p class="t-body t-muted" data-i18n="dress.notes">Tuxedo or dark suit for gentlemen.<br>Long or cocktail dress for ladies.<br>We kindly ask you to avoid white.</p>
         </div>
         <ul class="at palette" style="--x:46.5px; --y:388px; --w:300px">
-          <li class="rise"><img src="assets/img/sw-champagne.png" alt="" width="44" height="44"><span data-i18n="dress.champagne">CHAMPAGNE</span></li>
-          <li class="rise"><img src="assets/img/sw-taupe.png" alt="" width="44" height="44"><span data-i18n="dress.taupe">TAUPE</span></li>
-          <li class="rise"><img src="assets/img/sw-rose.png" alt="" width="44" height="44"><span data-i18n="dress.rose">DUSTY ROSE</span></li>
-          <li class="rise"><img src="assets/img/sw-wine.png" alt="" width="44" height="44"><span data-i18n="dress.wine">WINE</span></li>
+          <li class="rise"><img src="assets/img/sw-champagne.png" loading="lazy" decoding="async" alt="" width="44" height="44"><span data-i18n="dress.champagne">CHAMPAGNE</span></li>
+          <li class="rise"><img src="assets/img/sw-taupe.png" loading="lazy" decoding="async" alt="" width="44" height="44"><span data-i18n="dress.taupe">TAUPE</span></li>
+          <li class="rise"><img src="assets/img/sw-rose.png" loading="lazy" decoding="async" alt="" width="44" height="44"><span data-i18n="dress.rose">DUSTY ROSE</span></li>
+          <li class="rise"><img src="assets/img/sw-wine.png" loading="lazy" decoding="async" alt="" width="44" height="44"><span data-i18n="dress.wine">WINE</span></li>
         </ul>
-        <img class="at" src="assets/icons/bow-dress.svg" alt="" style="--x:174px; --y:479px; --w:45px">
-        <img class="at guests rise" src="assets/img/guests.jpg" data-i18n-attr="alt:dress.guestsAlt" alt="Guests in evening wear" style="--x:24px; --y:522px; --w:345px">
+        <img loading="lazy" decoding="async" class="at" src="assets/icons/bow-dress.svg" alt="" style="--x:174px; --y:479px; --w:45px">
+        <img class="at guests rise" src="assets/img/guests.jpg" loading="lazy" decoding="async" data-i18n-attr="alt:dress.guestsAlt" alt="Guests in evening wear" style="--x:24px; --y:522px; --w:345px">
         <p class="at t-eyebrow t-muted" style="--x:40px; --y:811px; --w:313px" data-i18n="dress.caption">A little inspiration for our evening together.</p>
       </div>
     </section>
@@ -255,7 +255,7 @@
         </div>
 
         <div class="reply-card">
-          <img class="reply-card__lace" src="assets/img/rsvp-lace.jpg" alt="">
+          <img class="reply-card__lace" src="assets/img/rsvp-lace.jpg" loading="lazy" decoding="async" alt="">
           <form class="reply" novalidate>
             <label class="field">
               <span class="t-label" data-i18n="rsvp.name">Your first and last name</span>
@@ -283,7 +283,7 @@
       </div>
 
       <div class="stage thanks" hidden>
-        <img class="at" src="assets/icons/bow-large.svg" alt="" style="--x:145px; --y:152px; --w:103px">
+        <img loading="lazy" decoding="async" class="at" src="assets/icons/bow-large.svg" alt="" style="--x:145px; --y:152px; --w:103px">
         <div class="at thanks__text" style="--x:32px; --y:295px; --w:329px">
           <p class="t-eyebrow" data-i18n="thanks.eyebrow">WITH LOVE &amp; GRATITUDE</p>
           <h2 class="t-title-40" data-i18n="thanks.title">Thank you<br>for your reply.</h2>
@@ -299,9 +299,9 @@
     <section class="screen screen--ivory" id="closing">
       <div class="stage">
         <p class="at t-eyebrow" style="--x:30px; --y:51px; --w:333px" data-i18n="closing.eyebrow">UNTIL THEN, WITH ALL OUR LOVE</p>
-        <img class="at oval-frame" src="assets/img/oval-frame.jpg" alt="" style="--x:14px; --y:98px; --w:365px">
+        <img class="at oval-frame" src="assets/img/oval-frame.jpg" loading="lazy" decoding="async" alt="" style="--x:14px; --y:98px; --w:365px">
         <div class="scratch">
-          <img class="scratch__photo" src="assets/img/couple.png" data-i18n-attr="alt:couple.full" alt="Charlotte and James">
+          <img class="scratch__photo" src="assets/img/couple.png" loading="lazy" decoding="async" data-i18n-attr="alt:couple.full" alt="Charlotte and James">
           <canvas class="scratch__cover" aria-hidden="true"></canvas>
           <p class="scratch__hint" data-i18n="closing.scratch">SCRATCH TO REVEAL</p>
         </div>
@@ -322,7 +322,7 @@
     <div class="sheet__backdrop" data-close></div>
     <div class="sheet__panel">
       <div class="stage">
-        <button class="sheet__close" type="button" data-close data-i18n-attr="aria-label:sheet.close"><img src="assets/icons/close.svg" alt="" width="16" height="16"></button>
+        <button class="sheet__close" type="button" data-close data-i18n-attr="aria-label:sheet.close"><img loading="lazy" decoding="async" src="assets/icons/close.svg" alt="" width="16" height="16"></button>
         <p class="at t-month" style="--x:46px; --y:64px; --w:301px" data-i18n="date.monthYear">September 2027</p>
         <div class="calendar">
           <span class="calendar__dow" data-i18n="cal.mon">M</span><span class="calendar__dow" data-i18n="cal.tue">T</span><span class="calendar__dow" data-i18n="cal.wed">W</span><span class="calendar__dow" data-i18n="cal.thu">T</span><span class="calendar__dow" data-i18n="cal.fri">F</span><span class="calendar__dow" data-i18n="cal.sat">S</span><span class="calendar__dow" data-i18n="cal.sun">S</span>
@@ -335,7 +335,7 @@
           <span>27</span><span>28</span><span>29</span><span>30</span>
         </div>
         <p class="at t-body t-muted" style="--x:40px; --y:407px; --w:313px" data-i18n="cal.full">Saturday, 18 September · 4:00 PM</p>
-        <img class="at" src="assets/icons/bow-dress.svg" alt="" style="--x:174px; --y:449px; --w:45px">
+        <img loading="lazy" decoding="async" class="at" src="assets/icons/bow-dress.svg" alt="" style="--x:174px; --y:449px; --w:45px">
       </div>
     </div>
   </div>
@@ -344,13 +344,13 @@
     <div class="sheet__backdrop" data-close></div>
     <div class="sheet__panel">
       <div class="stage">
-        <button class="sheet__close" type="button" data-close data-i18n-attr="aria-label:sheet.close"><img src="assets/icons/close.svg" alt="" width="16" height="16"></button>
+        <button class="sheet__close" type="button" data-close data-i18n-attr="aria-label:sheet.close"><img loading="lazy" decoding="async" src="assets/icons/close.svg" alt="" width="16" height="16"></button>
         <h2 class="at t-title-32" style="--x:46px; --y:54px; --w:301px" data-i18n="map.title">Find us</h2>
         <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Rosewood+Manor+Cotswolds" target="_blank" rel="noopener" data-i18n-attr="aria-label:map.open">
-          <img class="map__art" src="assets/icons/map.svg" alt="">
+          <img loading="lazy" decoding="async" class="map__art" src="assets/icons/map.svg" alt="">
           <span class="map__label" data-i18n="venue.nameCaps">ROSEWOOD MANOR</span>
         </a>
-        <img class="map__pin" src="assets/icons/map-pin.svg" alt="">
+        <img loading="lazy" decoding="async" class="map__pin" src="assets/icons/map-pin.svg" alt="">
         <p class="at t-label t-wine" style="--x:36px; --y:405px; --w:321px" data-i18n="map.venue">Rosewood Manor · The Cotswolds</p>
         <p class="at t-small t-muted" style="--x:36px; --y:437px; --w:321px" data-i18n="map.parking">Parking is available at the main entrance.</p>
       </div>
