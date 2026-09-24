@@ -344,9 +344,9 @@
   const GATE_BEATS = [
     [0, "is-cracking"],   // the seal takes the strain
     [240, "is-broken"],   // it snaps along the crack
-    [420, "is-falling"],  // the halves fall out of frame
-    [1150, "is-open"],    // the bow gives way, the untie spreading out of the knot
-    [1950, "is-parting"], // the leaves slide aside
+    [360, "is-falling"],  // the halves are thrown out of frame
+    [900, "is-open"],     // the bow gives way to the loose ribbon
+    [1600, "is-parting"], // the leaves slide aside
   ];
   const openGate = () => {
     if (opened) return;
@@ -359,8 +359,8 @@
       return;
     }
     for (const [at, beat] of GATE_BEATS) setTimeout(() => gate.classList.add(beat), at);
-    setTimeout(() => root.classList.add("is-revealed"), 1950);
-    setTimeout(finishGate, 3450);
+    setTimeout(() => root.classList.add("is-revealed"), 1600);
+    setTimeout(finishGate, 3100);
   };
   gate.addEventListener("click", openGate);
   gate.addEventListener("keydown", (e) => {

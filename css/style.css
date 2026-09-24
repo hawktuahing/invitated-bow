@@ -223,16 +223,11 @@ p.at, h2.at, h3.at { text-align: center; }
   width: 200%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 0.7s ease;
 }
 .gate__leaf--left .gate__art  { left: 0; }
 .gate__leaf--right .gate__art { right: 0; }
-/* The loose ribbon is uncovered by a circle growing out of the knot, so the change spreads from
-   where the bow is tied instead of the whole picture dissolving at once. */
-.gate__art--untied {
-  clip-path: circle(0% at 50% 37%);
-  transform: translateY(-1.3%) scale(1.03);
-  transition: clip-path 0.85s cubic-bezier(0.3, 0.75, 0.35, 1), transform 0.9s cubic-bezier(0.3, 0.8, 0.4, 1);
-}
+.gate__art--untied { opacity: 0; }
 
 .gate__seal {
   --u: max(100cqw / 393, 100cqh / 852);
@@ -263,22 +258,18 @@ p.at, h2.at, h3.at { text-align: center; }
   30% { transform: rotate(-2deg) scale(1.03); }
   70% { transform: rotate(2.5deg) scale(1.05); }
 }
-.gate.is-broken .gate__half--left  { transform: translate(-4%, 1%) rotate(-3.5deg); }
-.gate.is-broken .gate__half--right { transform: translate(4%, 1.5%) rotate(4deg); }
+.gate.is-broken .gate__half { transition-duration: 0.1s; } /* the crack itself is a snap */
+.gate.is-broken .gate__half--left  { transform: translate(-5%, 1%) rotate(-5deg); }
+.gate.is-broken .gate__half--right { transform: translate(5%, 1.5%) rotate(6deg); }
 .gate.is-falling .gate__half {
   opacity: 0;
-  /* They stay solid most of the way down, so the fall is seen rather than dissolved. */
-  transition: transform 0.95s cubic-bezier(0.45, 0.05, 0.75, 0.5), opacity 0.4s ease 0.5s;
+  /* Thrown off fast and faded out well before they would reach the bottom of the frame. */
+  transition: transform 0.52s cubic-bezier(0.3, 0, 0.7, 0.35), opacity 0.3s ease 0.16s;
 }
-.gate.is-falling .gate__half--left  { transform: translate(-34%, 108%) rotate(-44deg) scale(0.94); }
-.gate.is-falling .gate__half--right { transform: translate(38%, 122%) rotate(52deg) scale(0.92); }
+.gate.is-falling .gate__half--left  { transform: translate(-58%, 210%) rotate(-62deg) scale(0.86); }
+.gate.is-falling .gate__half--right { transform: translate(64%, 240%) rotate(74deg) scale(0.84); }
 
-/* The right half gives a moment after the left, the way a knot actually pulls loose. */
-.gate.is-open .gate__leaf--right .gate__art--untied { transition-delay: 0.14s; }
-.gate.is-open .gate__art--untied {
-  clip-path: circle(145% at 50% 37%);
-  transform: none;
-}
+.gate.is-open .gate__art--untied { opacity: 1; }
 .gate.is-parting .gate__leaf--left  { transform: translateX(-101%); }
 .gate.is-parting .gate__leaf--right { transform: translateX(101%); }
 
