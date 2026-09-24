@@ -54,6 +54,8 @@
     if (clip) { clip.preload = "auto"; clip.load(); }
     // Same for the untied still: it is what the clip hands over to, long after this moment.
     for (const art of document.querySelectorAll(".gate__art[data-src]")) art.src = art.dataset.src;
+    const track = document.querySelector(".music");
+    if (track) { track.preload = "auto"; track.load(); } // ready for the tap that opens the gate
   });
 
   /* ---------- Language ---------- */
