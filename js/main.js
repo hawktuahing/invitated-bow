@@ -16,7 +16,8 @@
   const FIRST_SCREEN = [
     "assets/img/gate-tied.jpg",
     "assets/img/gate-untied.jpg",
-    "assets/img/seal.png",
+    "assets/img/seal-left.png",
+    "assets/img/seal-right.png",
     "assets/img/garden.jpg",
   ];
   let loadedCount = 0;
