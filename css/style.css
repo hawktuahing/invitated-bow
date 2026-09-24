@@ -101,7 +101,6 @@ p.at, h2.at, h3.at { text-align: center; }
    and the hero takes the whole screen height. */
 @media (max-width: 600px) {
   .app { max-width: none; box-shadow: none; }
-  .gate { width: 100%; }
 }
 
 /* Until the envelope is opened the page simply ends at it: the screens below are out of the
@@ -203,7 +202,7 @@ p.at, h2.at, h3.at { text-align: center; }
   top: 0;
   bottom: 0;
   left: 50%;
-  width: min(100%, 393px);
+  width: min(100%, calc(393px * var(--k)));
   translate: -50% 0;
   container-type: size;
   z-index: 50;
