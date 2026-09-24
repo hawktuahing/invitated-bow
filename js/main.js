@@ -212,7 +212,13 @@
   // the animation's length added to the track below it.
   const measurePin = () => {
     const k = parseFloat(getComputedStyle(root).getPropertyValue("--k")) || 1;
-    program.style.setProperty("--pin-run", `${scrollSpan() * k}px`);
+    // The board is scaled to the pinned screen's own height when the phone is shorter than the
+    // mock, so the last bow is never cut off the bottom.
+    const pin = program.querySelector(".pin");
+    const board = program.querySelector(".stage");
+    const fits = Math.min(k, (pin.clientHeight || 852) / 780);
+    board.style.zoom = fits.toFixed(4);
+    program.style.setProperty("--pin-run", `${scrollSpan() * fits}px`);
   };
 
   const measureBows = () => {

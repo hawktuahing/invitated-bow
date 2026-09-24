@@ -540,6 +540,9 @@ p.at, h2.at, h3.at { text-align: center; }
   overflow: visible;
   height: calc(100svh + var(--pin-run, 0px));
 }
+/* The programme's own board is only as tall as its contents, so it can be scaled to fit the
+   pinned screen without the timeline being cut off at the bottom. */
+.screen--pin .stage { height: 780px; }
 .screen--pin .pin {
   position: sticky;
   top: 0;
