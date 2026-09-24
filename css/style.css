@@ -82,8 +82,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* The mock draws this screen 660px tall, shorter than the rest; the screen around it is full
    height like every other, so the board simply sits in the middle. */
 .screen--date .stage { height: 660px; }
-/* The clip carries its own paper right up past the heading, so the type sits above it. */
-.screen--date .at { z-index: 2; }
 .screen--date .board {
   position: relative;
   width: 393px;
@@ -484,33 +482,18 @@ p.at, h2.at, h3.at { text-align: center; }
 /* ---------- 3. Save the date ---------- */
 .envelope {
   position: absolute;
-  z-index: 1;
   left: 0;
   top: 170px;
   width: 393px;
   height: 393px;
 }
-/* The opening is a filmed clip; it is laid over the screen so that its first frame sits exactly
-   where the mock draws the closed envelope. */
-.envelope__clip {
+.envelope__art {
   position: absolute;
-  left: 2.8px;
-  top: -148.4px;
-  width: 386px;
-  height: 686px;
-  object-fit: cover;
-  pointer-events: none;
-  /* The clip carries its own paper around the envelope; its edges are feathered so that paper
-     blends into the screen's instead of ending on a seam. */
-  -webkit-mask-image:
-    linear-gradient(to bottom, transparent 0, #000 96px, #000 calc(100% - 64px), transparent 100%),
-    linear-gradient(to right, transparent 0, #000 15px, #000 calc(100% - 15px), transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to bottom, transparent 0, #000 96px, #000 calc(100% - 64px), transparent 100%),
-    linear-gradient(to right, transparent 0, #000 15px, #000 calc(100% - 15px), transparent 100%);
-  mask-composite: intersect;
+  inset: 0;
+  background: url("../assets/img/envelope.jpg") 0 0 / 200% 100% no-repeat;
+  transition: opacity 0.6s ease;
 }
+.envelope__art--open { background-position: 100% 0; opacity: 0; }
 .envelope__card {
   position: absolute;
   left: 95px;
@@ -523,14 +506,16 @@ p.at, h2.at, h3.at { text-align: center; }
   opacity: 0;
   translate: 0 14px;
 }
+.envelope.is-open .envelope__art--open { opacity: 1; }
+.envelope.is-open .envelope__art--closed { opacity: 0; }
 .envelope.is-open .envelope__card {
   opacity: 1;
   translate: none;
   transition: opacity 0.8s ease 0.35s, translate 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s;
 }
-.envelope:not(.is-playing):active { transform: scale(0.99); }
+.envelope:not(.is-open):active { transform: scale(0.99); }
 /* A small nudge so the closed envelope reads as something to tap. */
-.envelope:not(.is-playing) { animation: envelope-nudge 4s ease-in-out 1.5s infinite; }
+.envelope:not(.is-open) { animation: envelope-nudge 4s ease-in-out 1.5s infinite; }
 @keyframes envelope-nudge {
   0%, 84%, 100% { transform: none; }
   88% { transform: rotate(-1deg); }
