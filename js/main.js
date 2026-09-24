@@ -376,13 +376,26 @@
 
   /* ---------- 3. Save the date envelope ---------- */
   const envelope = document.querySelector(".envelope");
+  const clip = envelope.querySelector(".envelope__clip");
+  // The clip runs once and holds on its last frame; the card's date follows it in.
+  const settleEnvelope = () => {
+    envelope.classList.add("is-open");
+    envelope.closest(".screen").classList.add("is-open");
+    envelope.setAttribute("aria-expanded", "true");
+    envelope.setAttribute("aria-label", lang.t("save.closeAria"));
+  };
+  clip.addEventListener("ended", settleEnvelope);
+  clip.addEventListener("error", settleEnvelope); // no clip: at least show the date
   envelope.addEventListener("click", () => {
-    const open = !envelope.classList.contains("is-open");
-    if (open) dateOpened = true; // once it has been opened the page carries on, even if it is shut again
-    envelope.classList.toggle("is-open", open);
-    envelope.closest(".screen").classList.toggle("is-open", open);
-    envelope.setAttribute("aria-expanded", String(open));
-    envelope.setAttribute("aria-label", lang.t(open ? "save.closeAria" : "save.openAria"));
+    if (envelope.classList.contains("is-playing")) return;
+    envelope.classList.add("is-playing");
+    dateOpened = true; // the page may carry on past this screen from here
+    if (reduceMotion) {
+      clip.currentTime = clip.duration || 5;
+      settleEnvelope();
+      return;
+    }
+    clip.play().catch(settleEnvelope);
   });
 
   /* ---------- 5. Calendar / map sheets ---------- */
