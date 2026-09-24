@@ -225,11 +225,10 @@ p.at, h2.at, h3.at { text-align: center; }
   width: 200%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.7s ease;
 }
 .gate__leaf--left .gate__art  { left: 0; }
 .gate__leaf--right .gate__art { right: 0; }
-.gate__art--untied { opacity: 0; }
+.gate__art--untied { opacity: 0; } /* switched on the frame the clip ends, never faded */
 
 /* The filmed untying, in the same framing as the two stills it was cut from. */
 .gate__clip {

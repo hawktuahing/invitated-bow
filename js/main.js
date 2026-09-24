@@ -344,8 +344,10 @@
   let opened = false;
   const partGate = () => {
     if (gate.classList.contains("is-parting")) return;
-    gate.classList.add("is-open");     // the untied still, identical to the clip's last frame
-    gate.classList.remove("is-playing");
+    // The untied still goes up first and the clip is only taken away once it has been painted,
+    // otherwise the tied still shows through in between.
+    gate.classList.add("is-open");
+    requestAnimationFrame(() => requestAnimationFrame(() => gate.classList.remove("is-playing")));
     setTimeout(() => {
       gate.classList.add("is-parting");
       root.classList.add("is-revealed");
