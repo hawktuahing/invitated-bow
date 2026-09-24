@@ -20,15 +20,23 @@
     "assets/img/garden.jpg",
   ];
   let loadedCount = 0;
-  const steps = FIRST_SCREEN.length + 1; // the images, plus the fonts
+  const steps = FIRST_SCREEN.length + 2; // the images, the gate's clip, the fonts
   const bump = () => loader.style.setProperty("--load", (++loadedCount / steps).toFixed(3));
   const waitForImage = (src) => new Promise((done) => {
     const probe = new Image();
     probe.onload = probe.onerror = () => { bump(); done(); };
     probe.src = src; // already requested by the markup, so this resolves off the same load
   });
+  const clipReady = new Promise((done) => {
+    const clip = document.querySelector(".gate__clip");
+    if (!clip) return done();
+    if (clip.readyState >= 3) return done();
+    clip.addEventListener("canplaythrough", done, { once: true });
+    clip.addEventListener("error", done, { once: true });
+  });
   const firstScreenReady = Promise.all([
     ...FIRST_SCREEN.map(waitForImage),
+    clipReady.then(bump),
     (document.fonts?.ready ?? Promise.resolve()).then(bump),
   ]);
   // Never hold the page hostage to a slow asset: after 8s the invitation opens regardless.
@@ -334,6 +342,16 @@
   /* ---------- 0. Gate: untie, drop the seal, part the lace ---------- */
   const gate = document.getElementById("gate");
   let opened = false;
+  const partGate = () => {
+    if (gate.classList.contains("is-parting")) return;
+    gate.classList.add("is-open");     // the untied still, identical to the clip's last frame
+    gate.classList.remove("is-playing");
+    setTimeout(() => {
+      gate.classList.add("is-parting");
+      root.classList.add("is-revealed");
+    }, 60);
+    setTimeout(finishGate, 1560);
+  };
   const finishGate = () => {
     gate.remove();
     root.classList.remove("is-locked");
@@ -345,22 +363,24 @@
     [0, "is-cracking"],   // the seal takes the strain
     [240, "is-broken"],   // it snaps along the crack
     [360, "is-falling"],  // the halves are thrown out of frame
-    [900, "is-open"],     // the bow gives way to the loose ribbon
-    [1600, "is-parting"], // the leaves slide aside
+    [640, "is-playing"],  // the filmed untying takes over from the still
   ];
+  const gateClip = gate.querySelector(".gate__clip");
   const openGate = () => {
     if (opened) return;
     opened = true;
     playMusic(); // the tap is the user gesture browsers need before audio can start
     if (reduceMotion) {
-      for (const [, beat] of GATE_BEATS) gate.classList.add(beat);
+      gate.classList.add("is-open", "is-parting");
       root.classList.add("is-revealed");
       finishGate();
       return;
     }
     for (const [at, beat] of GATE_BEATS) setTimeout(() => gate.classList.add(beat), at);
-    setTimeout(() => root.classList.add("is-revealed"), 1600);
-    setTimeout(finishGate, 3100);
+    setTimeout(() => gateClip.play().catch(partGate), 640);
+    // When the ribbon has settled the still takes over again and the leaves slide aside.
+    gateClip.addEventListener("ended", partGate, { once: true });
+    gateClip.addEventListener("error", partGate, { once: true });
   };
   gate.addEventListener("click", openGate);
   gate.addEventListener("keydown", (e) => {

@@ -231,13 +231,26 @@ p.at, h2.at, h3.at { text-align: center; }
 .gate__leaf--right .gate__art { right: 0; }
 .gate__art--untied { opacity: 0; }
 
+/* The filmed untying, in the same framing as the two stills it was cut from. */
+.gate__clip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+}
+.gate.is-playing .gate__clip { opacity: 1; }
+
 .gate__seal {
-  --u: max(100cqw / 393, 100cqh / 852);
+  /* one pixel of the clip, at the scale it is displayed */
+  --v: max(100cqw / 1080, 100cqh / 1920);
   position: absolute;
   left: 50%;
-  top: calc(50% - 149 * var(--u)); /* 285 − 8 − 426: seal top vs. the art's centre */
-  width: calc(92 * var(--u));
-  height: calc(92 * var(--u));
+  top: calc(50% - 197 * var(--v)); /* the knot sits 71px above the clip's centre */
+  width: calc(253 * var(--v));
+  height: calc(253 * var(--v));
   translate: -50% 0;
 }
 .gate__half {
