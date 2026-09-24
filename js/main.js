@@ -11,6 +11,33 @@
   fit();
   addEventListener("resize", fit);
 
+  /* ---------- Preloader: the gate only shows once its art is really there ---------- */
+  const loader = document.getElementById("loader");
+  const FIRST_SCREEN = [
+    "assets/img/gate-tied.jpg",
+    "assets/img/gate-untied.jpg",
+    "assets/img/seal.png",
+    "assets/img/garden.jpg",
+  ];
+  let loadedCount = 0;
+  const steps = FIRST_SCREEN.length + 1; // the images, plus the fonts
+  const bump = () => loader.style.setProperty("--load", (++loadedCount / steps).toFixed(3));
+  const waitForImage = (src) => new Promise((done) => {
+    const probe = new Image();
+    probe.onload = probe.onerror = () => { bump(); done(); };
+    probe.src = src; // already requested by the markup, so this resolves off the same load
+  });
+  const firstScreenReady = Promise.all([
+    ...FIRST_SCREEN.map(waitForImage),
+    (document.fonts?.ready ?? Promise.resolve()).then(bump),
+  ]);
+  // Never hold the page hostage to a slow asset: after 8s the invitation opens regardless.
+  Promise.race([firstScreenReady, new Promise((done) => setTimeout(done, 8000))]).then(() => {
+    loader.style.setProperty("--load", "1");
+    loader.classList.add("is-done");
+    setTimeout(() => loader.remove(), 800);
+  });
+
   /* ---------- Language ---------- */
   const LANGS = ["en", "ru", "uz"];
   const lang = {
@@ -312,17 +339,28 @@
     root.classList.remove("is-locked");
     root.classList.add("is-revealed");
   };
+  // The whole opening, in beats: the wax shudders, cracks, both halves drop away, the loosened
+  // bow sinks into a loose ribbon, and only then do the lace leaves part.
+  const GATE_BEATS = [
+    [0, "is-cracking"],   // the seal takes the strain
+    [240, "is-broken"],   // it snaps along the crack
+    [420, "is-falling"],  // the halves fall out of frame
+    [1150, "is-open"],    // the bow gives way, the untie spreading out of the knot
+    [1950, "is-parting"], // the leaves slide aside
+  ];
   const openGate = () => {
     if (opened) return;
     opened = true;
     playMusic(); // the tap is the user gesture browsers need before audio can start
-    gate.classList.add("is-open");
-    const untie = reduceMotion ? 0 : 900;
-    setTimeout(() => {
-      gate.classList.add("is-parting");
+    if (reduceMotion) {
+      for (const [, beat] of GATE_BEATS) gate.classList.add(beat);
       root.classList.add("is-revealed");
-    }, untie);
-    setTimeout(finishGate, untie + (reduceMotion ? 0 : 1500));
+      finishGate();
+      return;
+    }
+    for (const [at, beat] of GATE_BEATS) setTimeout(() => gate.classList.add(beat), at);
+    setTimeout(() => root.classList.add("is-revealed"), 1950);
+    setTimeout(finishGate, 3450);
   };
   gate.addEventListener("click", openGate);
   gate.addEventListener("keydown", (e) => {

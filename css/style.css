@@ -163,6 +163,34 @@ p.at, h2.at, h3.at { text-align: center; }
 .heading { display: flex; flex-direction: column; gap: 8px; text-align: center; }
 .heading--wide { gap: 18px; }
 
+/* ---------- Preloader ---------- */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 20px;
+  background: var(--paper);
+  transition: opacity 0.7s ease;
+}
+.loader__logo { width: 103px; height: 24px; opacity: 0.9; }
+.loader__track {
+  width: 132px;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(107, 48, 63, 0.16);
+}
+.loader__track i {
+  display: block;
+  width: calc(var(--load, 0) * 100%);
+  height: 100%;
+  background: var(--wine);
+  transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.loader.is-done { opacity: 0; pointer-events: none; }
+
 /* ---------- 0. Gate ---------- */
 /* Fills the phone screen (the 393px column on a desktop). --u is one mock pixel at the "cover"
    scale of the 393×852 art, so the seal stays on the knot at any screen shape. */
@@ -195,11 +223,16 @@ p.at, h2.at, h3.at { text-align: center; }
   width: 200%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.7s ease;
 }
 .gate__leaf--left .gate__art  { left: 0; }
 .gate__leaf--right .gate__art { right: 0; }
-.gate__art--untied { opacity: 0; }
+/* The loose ribbon is uncovered by a circle growing out of the knot, so the change spreads from
+   where the bow is tied instead of the whole picture dissolving at once. */
+.gate__art--untied {
+  clip-path: circle(0% at 50% 37%);
+  transform: translateY(-1.3%) scale(1.03);
+  transition: clip-path 0.85s cubic-bezier(0.3, 0.75, 0.35, 1), transform 0.9s cubic-bezier(0.3, 0.8, 0.4, 1);
+}
 
 .gate__seal {
   --u: max(100cqw / 393, 100cqh / 852);
@@ -207,22 +240,44 @@ p.at, h2.at, h3.at { text-align: center; }
   left: 50%;
   top: calc(50% - 149 * var(--u)); /* 285 − 8 − 426: seal top vs. the art's centre */
   width: calc(92 * var(--u));
-  height: auto;
+  height: calc(92 * var(--u));
   translate: -50% 0;
+}
+.gate__half {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: auto;
   filter: drop-shadow(0 2px 3px rgba(67, 47, 50, 0.18));
-  transition: transform 0.9s cubic-bezier(0.5, 0, 0.75, 0), opacity 0.4s ease 0.5s;
+  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.4s ease;
 }
 /* Invite a tap: the seal breathes until the gate is opened. */
-.gate:not(.is-open) .gate__seal { animation: seal-breathe 2.8s ease-in-out infinite; }
+.gate:not(.is-cracking) .gate__seal { animation: seal-breathe 2.8s ease-in-out infinite; }
 @keyframes seal-breathe {
   50% { transform: scale(1.05); }
 }
 
-.gate.is-open .gate__art--untied { opacity: 1; }
-.gate.is-open .gate__seal {
-  /* Slips down with the loosened ribbon, towards where the storyboard drops it, and fades. */
-  transform: translate(calc(29 * var(--u)), calc(250 * var(--u))) rotate(18deg) scale(1.2);
+/* The wax gives: a shudder, a snap along the crack, then both halves drop away. */
+.gate.is-cracking .gate__seal { animation: seal-shudder 0.26s ease-in-out; }
+@keyframes seal-shudder {
+  30% { transform: rotate(-2deg) scale(1.03); }
+  70% { transform: rotate(2.5deg) scale(1.05); }
+}
+.gate.is-broken .gate__half--left  { transform: translate(-4%, 1%) rotate(-3.5deg); }
+.gate.is-broken .gate__half--right { transform: translate(4%, 1.5%) rotate(4deg); }
+.gate.is-falling .gate__half {
   opacity: 0;
+  /* They stay solid most of the way down, so the fall is seen rather than dissolved. */
+  transition: transform 0.95s cubic-bezier(0.45, 0.05, 0.75, 0.5), opacity 0.4s ease 0.5s;
+}
+.gate.is-falling .gate__half--left  { transform: translate(-34%, 108%) rotate(-44deg) scale(0.94); }
+.gate.is-falling .gate__half--right { transform: translate(38%, 122%) rotate(52deg) scale(0.92); }
+
+/* The right half gives a moment after the left, the way a knot actually pulls loose. */
+.gate.is-open .gate__leaf--right .gate__art--untied { transition-delay: 0.14s; }
+.gate.is-open .gate__art--untied {
+  clip-path: circle(145% at 50% 37%);
+  transform: none;
 }
 .gate.is-parting .gate__leaf--left  { transform: translateX(-101%); }
 .gate.is-parting .gate__leaf--right { transform: translateX(101%); }

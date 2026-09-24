@@ -9,22 +9,32 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Pinyon Script has no Cyrillic, so Russian falls back to Marck Script (see html[lang=ru]). -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500&family=Pinyon+Script&family=Marck+Script&display=swap">
+  <link rel="preload" as="image" href="assets/img/gate-tied.jpg" fetchpriority="high">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+  <!-- Holds the first screen back until the lace, the seal and the garden are actually there. -->
+  <div class="loader" id="loader">
+    <img class="loader__logo" src="assets/icons/logo.svg" alt="Invitated" width="103" height="24">
+    <div class="loader__track"><i></i></div>
+  </div>
 
   <!-- 0. Gate: two lace leaves tied with a wine bow and sealed. A tap unties the ribbon, the seal
        falls away and the leaves part to either side, uncovering the hero. -->
   <div class="gate" id="gate" role="button" tabindex="0" data-i18n-attr="aria-label:gate.open">
     <div class="gate__leaf gate__leaf--left">
-      <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="">
+      <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="" fetchpriority="high">
       <img class="gate__art gate__art--untied" src="assets/img/gate-untied.jpg" alt="">
     </div>
     <div class="gate__leaf gate__leaf--right">
-      <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="">
+      <img class="gate__art gate__art--tied" src="assets/img/gate-tied.jpg" alt="" fetchpriority="high">
       <img class="gate__art gate__art--untied" src="assets/img/gate-untied.jpg" alt="">
     </div>
-    <img class="gate__seal" src="assets/img/seal.png" alt="">
+    <div class="gate__seal">
+      <img class="gate__half gate__half--left" src="assets/img/seal-left.png" alt="">
+      <img class="gate__half gate__half--right" src="assets/img/seal-right.png" alt="">
+    </div>
   </div>
 
   <!-- Sits above every screen, hides when the page is scrolled down and slides back on the way up. -->
