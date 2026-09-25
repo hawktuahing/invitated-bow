@@ -528,7 +528,7 @@
   canvas.width = W * ratio;
   canvas.height = H * ratio;
   ctx.scale(ratio, ratio);
-  ctx.fillStyle = "rgba(239, 229, 210, 0.91)"; // #EFE5D2 at 91%, as in the mock
+  ctx.fillStyle = "rgba(239, 229, 210, 0.98)"; // #EFE5D2, near solid: the photo is a surprise
   ctx.fillRect(0, 0, W, H);
   ctx.globalCompositeOperation = "destination-out";
   ctx.lineCap = ctx.lineJoin = "round";
@@ -566,8 +566,8 @@
   const endStroke = () => {
     if (!last) return;
     last = null;
-    // The oval is ~79% of the canvas, so a third of the rectangle is already most of the photo.
-    if (++strokes >= 2 && clearedShare() > 0.33) scratch.classList.add("is-clear");
+    // The oval covers ~79% of the canvas it is cut from, so this is 60% of what can be scratched.
+    if (++strokes >= 2 && clearedShare() > 0.47) scratch.classList.add("is-clear");
   };
   canvas.addEventListener("pointerup", endStroke);
   canvas.addEventListener("pointercancel", endStroke);
