@@ -318,11 +318,24 @@
   const music = document.querySelector(".music");
   const sound = document.querySelector(".sound");
   let fade = null;
+  // iPhones ignore volume on an audio element — it is the hardware's business there — so a fade
+  // that waits for the volume to arrive would wait forever, and the music would never stop.
+  let volumeObeys = null;
+  const canFade = () => {
+    if (volumeObeys === null) {
+      music.volume = 0.5;
+      volumeObeys = Math.abs(music.volume - 0.5) < 0.01;
+      music.volume = 1;
+    }
+    return volumeObeys;
+  };
   const fadeTo = (to, done) => {
     clearInterval(fade);
+    if (!canFade()) { done?.(); return; } // no fade to be had: just do the thing
+    let steps = 0;
     fade = setInterval(() => {
       music.volume = Math.max(0, Math.min(1, music.volume + (to > music.volume ? 0.08 : -0.08)));
-      if (Math.abs(music.volume - to) < 0.08) {
+      if (Math.abs(music.volume - to) < 0.08 || ++steps > 20) {
         music.volume = to;
         clearInterval(fade);
         done?.();
@@ -344,7 +357,7 @@
   music.addEventListener("canplay", markTrackFound);
 
   const playMusic = () => {
-    music.volume = 0;
+    if (canFade()) music.volume = 0;
     return music.play().then(() => {
       markTrackFound();
       sound.setAttribute("aria-pressed", "true");
@@ -358,6 +371,8 @@
   const stopMusic = () => {
     sound.setAttribute("aria-pressed", "false");
     fadeTo(0, () => music.pause());
+    // Whatever the fade does or doesn't manage, the music is stopped.
+    setTimeout(() => { if (sound.getAttribute("aria-pressed") !== "true") music.pause(); }, 900);
   };
   // A click always tries to play: if a track turns up later, the button comes back to life.
   sound.addEventListener("click", () => {
