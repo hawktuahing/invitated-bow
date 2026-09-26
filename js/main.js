@@ -566,8 +566,8 @@
   const endStroke = () => {
     if (!last) return;
     last = null;
-    // The oval covers ~79% of the canvas it is cut from, so this is half of what can be scratched.
-    if (++strokes >= 2 && clearedShare() > 0.39) scratch.classList.add("is-clear");
+    // The oval covers ~79% of the canvas it is cut from, so this is 35% of what can be scratched.
+    if (++strokes >= 2 && clearedShare() > 0.275) scratch.classList.add("is-clear");
   };
   canvas.addEventListener("pointerup", endStroke);
   canvas.addEventListener("pointercancel", endStroke);
