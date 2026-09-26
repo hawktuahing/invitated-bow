@@ -316,8 +316,8 @@ p.at, h2.at, h3.at { text-align: center; }
   left: 50%;
   z-index: 30;
   width: min(100%, calc(393px * var(--k)));
-  height: calc(68px * var(--k));
-  padding: 0 calc(32px * var(--k));
+  height: calc(80px * var(--k));
+  padding: calc(14px * var(--k)) calc(32px * var(--k)) 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -334,9 +334,9 @@ p.at, h2.at, h3.at { text-align: center; }
 .topbar::before {
   content: "";
   position: absolute;
-  inset: 0 0 -75% 0;
+  inset: 0 0 -30% 0;
   z-index: -1;
-  background: linear-gradient(180deg, var(--bar-tint, var(--paper)) 0%, var(--bar-tint, var(--paper)) 40%, transparent 100%);
+  background: linear-gradient(180deg, var(--bar-tint, var(--paper)) 0%, var(--bar-tint, var(--paper)) 62%, transparent 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
