@@ -18,6 +18,10 @@
   /* Every screen in the mock is a 393px-wide phone column and everything below is placed in those
      pixels. On a narrower phone main.js sets --k below 1 and each stage is zoomed down to fit. */
   --k: 1;
+  /* The screen's height, locked at load: in-app browsers (Telegram, Instagram) grow and shrink
+     the viewport as their address bar collapses, and anything measured in svh would resize with
+     it — backgrounds re-cropping, text shifting, the scroll jumping. */
+  --vh: 100svh;
 }
 
 html[lang="ru"] {
@@ -60,7 +64,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    early with a strip of the next one showing under it. */
 .screen {
   position: relative;
-  min-height: 100svh;
+  min-height: var(--vh);
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -284,7 +288,7 @@ p.at, h2.at, h3.at { text-align: center; }
 
 /* ---------- 1. Invitation ---------- */
 .screen--hero { background: var(--blush); }
-.screen--hero .stage { height: calc(100svh / var(--k)); } /* the art bleeds to the window edges */
+.screen--hero .stage { height: calc(var(--vh) / var(--k)); } /* the art bleeds to the window edges */
 
 .hero__garden {
   position: absolute;
@@ -544,7 +548,7 @@ p.at, h2.at, h3.at { text-align: center; }
    the height of the track it scrolls through and the height of the sticky part. */
 .screen--pin {
   overflow: visible;
-  height: calc(100svh + var(--pin-run, 0px));
+  height: calc(var(--vh) + var(--pin-run, 0px));
 }
 /* The programme's own board is only as tall as its contents, so it can be scaled to fit the
    pinned screen without the timeline being cut off at the bottom. */
@@ -552,7 +556,7 @@ p.at, h2.at, h3.at { text-align: center; }
 .screen--pin .pin {
   position: sticky;
   top: 0;
-  height: 100svh;
+  height: var(--vh);
   display: grid;
   place-items: center;
   overflow: hidden;

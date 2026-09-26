@@ -8,16 +8,27 @@
   /* ---------- Fit the 393px mock column to narrower phones ---------- */
   // One mock pixel, in real pixels. A phone gets the board stretched to its full width, so no
   // screen ends in a strip of bare paper; a browser window keeps the mock's own size at most.
-  // clientHeight, not innerHeight: on iOS the latter shrinks and grows with the address bar, and
-  // everything would rescale mid-scroll.
+  //
+  // The height is locked to what the screen was when the page opened. In-app browsers — Telegram's
+  // above all — shrink their address bar as you scroll down and bring it back as you scroll up,
+  // which changes the viewport height by a hundred pixels or so. Anything sized off that height
+  // would then be re-laid-out mid-scroll: backgrounds re-crop, text slides, and the page jumps
+  // under the finger. So the height only ever changes when the width does, i.e. on rotation.
+  let lockedWidth = 0;
+  let viewportHeight = innerHeight;
   const fit = () => {
     const width = root.clientWidth;
-    const portraitPhone = width <= 600 && root.clientHeight > width;
-    const k = portraitPhone ? width / 393 : Math.min(1, width / 393, root.clientHeight / 852);
+    if (width === lockedWidth) return; // the address bar moved; nothing here needs redoing
+    lockedWidth = width;
+    viewportHeight = innerHeight;
+    const portraitPhone = width <= 600 && viewportHeight > width;
+    const k = portraitPhone ? width / 393 : Math.min(1, width / 393, viewportHeight / 852);
     root.style.setProperty("--k", k.toFixed(4));
+    root.style.setProperty("--vh", `${viewportHeight}px`);
   };
   fit();
   addEventListener("resize", fit);
+  addEventListener("orientationchange", () => { lockedWidth = 0; setTimeout(fit, 120); });
 
   /* ---------- Preloader: the gate only shows once its art is really there ---------- */
   const loader = document.getElementById("loader");
@@ -151,7 +162,7 @@
 
   /* ---------- Smooth scrolling (desktop wheels; phones already glide) ---------- */
   const smooth = { target: scrollY, running: false };
-  const maxScroll = () => document.body.scrollHeight - innerHeight;
+  const maxScroll = () => document.body.scrollHeight - viewportHeight;
   const useSmooth = matchMedia("(pointer: fine)").matches && !reduceMotion;
   if (useSmooth) {
     const step = () => {
@@ -167,7 +178,7 @@
     addEventListener("wheel", (e) => {
       if (root.classList.contains("is-locked") || e.ctrlKey) return;
       e.preventDefault();
-      const lines = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1;
+      const lines = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? viewportHeight : 1;
       glideTo((smooth.running ? smooth.target : scrollY) + e.deltaY * lines);
     }, { passive: false });
     addEventListener("scroll", () => { if (!smooth.running) smooth.target = scrollY; }, { passive: true });
@@ -218,7 +229,7 @@
     // mock, so the last bow is never cut off the bottom.
     const pin = program.querySelector(".pin");
     const board = program.querySelector(".stage");
-    const fits = Math.min(k, (pin.clientHeight || 852) / 780);
+    const fits = Math.min(k, (viewportHeight || 852) / 780);
     board.style.zoom = fits.toFixed(4);
     program.style.setProperty("--pin-run", `${scrollSpan() * fits}px`);
   };
@@ -269,7 +280,7 @@
     if (!ribbon.offsetHeight) return;
 
     // Layout pixels, so the rows' own fade-in cannot move the measurements around.
-    const run = Math.max(1, program.offsetHeight - innerHeight);
+    const run = Math.max(1, program.offsetHeight - viewportHeight);
     const q = clamp01(-program.getBoundingClientRect().top / run);
     let pulled = q * scrollSpan();
     let thread = 0;
