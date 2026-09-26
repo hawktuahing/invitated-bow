@@ -135,6 +135,17 @@
 
   /* ---------- Top bar: hides going down, comes back going up ---------- */
   const topbar = document.getElementById("topbar");
+  // The bar takes the colour of whatever screen is under it, so it never sits there as a slab of
+  // the wrong shade — least of all a cream one over the wine screen.
+  const TINTS = { "screen--wine": "#6b303f", "screen--ivory": "#fcf9f3", "screen--hero": "#f5ede0" };
+  const screens = [...document.querySelectorAll(".screen")];
+  const tintBar = (y) => {
+    const under = screens.find((s) => s.offsetTop <= y + 30 && y + 30 < s.offsetTop + s.offsetHeight);
+    if (!under) return;
+    const tone = Object.keys(TINTS).find((name) => under.classList.contains(name));
+    topbar.style.setProperty("--bar-tint", TINTS[tone] || "#f7f1e7");
+    topbar.classList.toggle("is-dark", tone === "screen--wine");
+  };
   let lastY = scrollY;
   const onScroll = () => {
     const y = Math.max(0, scrollY);
@@ -143,6 +154,7 @@
     if (down && y > 120) topbar.classList.add("is-hidden");
     else if (up || y < 60) topbar.classList.remove("is-hidden");
     topbar.classList.toggle("is-solid", y > 40); // a backdrop as soon as text could run under it
+    tintBar(y);
     lastY = y;
   };
   addEventListener("scroll", onScroll, { passive: true });

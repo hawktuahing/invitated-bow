@@ -334,9 +334,9 @@ p.at, h2.at, h3.at { text-align: center; }
 .topbar::before {
   content: "";
   position: absolute;
-  inset: -20% 0 -60% 0;
+  inset: 0; /* kept inside the bar, so nothing of it is left behind when the bar slides away */
   z-index: -1;
-  background: linear-gradient(180deg, var(--paper) 0%, rgba(247, 241, 231, 0.92) 55%, rgba(247, 241, 231, 0) 100%);
+  background: linear-gradient(180deg, var(--bar-tint, var(--paper)) 0%, var(--bar-tint, var(--paper)) 55%, transparent 100%);
   backdrop-filter: blur(6px);
   -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
@@ -344,6 +344,10 @@ p.at, h2.at, h3.at { text-align: center; }
   transition: opacity 0.45s ease;
 }
 .topbar.is-solid::before { opacity: 1; }
+.topbar.is-hidden::before { opacity: 0; } /* fade the veil as it goes, rather than dragging a strip */
+/* Over the wine screen the bar turns with it, rather than sitting there as a slab of cream. */
+.topbar.is-dark .lang { color: var(--paper); }
+.topbar.is-dark img { filter: brightness(0) invert(1); }
 .topbar__logo { width: 103px; height: 24px; }
 /* The bar's parts scale with the board so the masthead keeps the mock's proportions. Sized with
    calc rather than zoom: zoom inside a fixed bar loses taps in Chrome. */
