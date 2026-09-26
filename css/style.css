@@ -64,7 +64,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    early with a strip of the next one showing under it. */
 .screen {
   position: relative;
-  min-height: var(--vh);
+  min-height: calc(852px * var(--k)); /* the mock's own height: the same composition everywhere */
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -85,6 +85,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 /* The mock draws this screen 660px tall, shorter than the rest; the screen around it is full
    height like every other, so the board simply sits in the middle. */
+.screen--date { min-height: calc(660px * var(--k)); }
 .screen--date .stage { height: 660px; }
 .screen--date .board {
   position: relative;
@@ -288,15 +289,15 @@ p.at, h2.at, h3.at { text-align: center; }
 
 /* ---------- 1. Invitation ---------- */
 .screen--hero { background: var(--blush); }
-.screen--hero .stage { height: calc(var(--vh) / var(--k)); } /* the art bleeds to the window edges */
+.screen--hero .stage { height: 852px; }
 
 .hero__garden {
   position: absolute;
   left: -19.5px;
-  top: 72px;
+  top: 0;
   bottom: 0;
   width: 433px;
-  height: calc(100% - 72px);
+  height: 100%;
   object-fit: cover;
   object-position: 50% 100%;
   transform-origin: 50% 60%;
@@ -328,16 +329,19 @@ p.at, h2.at, h3.at { text-align: center; }
 /* Nothing above the gate until it has been opened. */
 .is-revealed .topbar { opacity: 1; pointer-events: auto; }
 .topbar.is-hidden { translate: -50% -100%; }
+/* A soft veil rather than a slab: it fades out downwards, so the bar has no hard edge against
+   whatever is scrolling under it. */
 .topbar::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -20% 0 -60% 0;
   z-index: -1;
-  background: rgba(252, 249, 243, 0.86);
-  backdrop-filter: blur(8px);
-  border-bottom: 0.6px solid rgba(207, 186, 176, 0.5);
+  background: linear-gradient(180deg, var(--paper) 0%, rgba(247, 241, 231, 0.92) 55%, rgba(247, 241, 231, 0) 100%);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.45s ease;
 }
 .topbar.is-solid::before { opacity: 1; }
 .topbar__logo { width: 103px; height: 24px; }

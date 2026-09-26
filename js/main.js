@@ -24,7 +24,7 @@
     const portraitPhone = width <= 600 && viewportHeight > width;
     const k = portraitPhone ? width / 393 : Math.min(1, width / 393, viewportHeight / 852);
     root.style.setProperty("--k", k.toFixed(4));
-    root.style.setProperty("--vh", `${viewportHeight}px`);
+    root.style.setProperty("--vh", `${viewportHeight}px`); // the pinned screen only
   };
   fit();
   addEventListener("resize", fit);
