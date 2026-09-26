@@ -329,22 +329,19 @@ p.at, h2.at, h3.at { text-align: center; }
 /* Nothing above the gate until it has been opened. */
 .is-revealed .topbar { opacity: 1; pointer-events: auto; }
 .topbar.is-hidden { translate: -50% -100%; }
-/* A soft veil rather than a slab: it fades out downwards, so the bar has no hard edge against
-   whatever is scrolling under it. */
+/* A soft veil rather than a slab: it reaches past the bar and fades out to nothing, so there is
+   no edge where it ends. No backdrop blur — its box cuts a hard line of its own on iOS. */
 .topbar::before {
   content: "";
   position: absolute;
-  inset: 0; /* kept inside the bar, so nothing of it is left behind when the bar slides away */
+  inset: 0 0 -75% 0;
   z-index: -1;
-  background: linear-gradient(180deg, var(--bar-tint, var(--paper)) 0%, var(--bar-tint, var(--paper)) 55%, transparent 100%);
-  backdrop-filter: blur(6px);
-  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+  background: linear-gradient(180deg, var(--bar-tint, var(--paper)) 0%, var(--bar-tint, var(--paper)) 40%, transparent 100%);
   opacity: 0;
-  transition: opacity 0.45s ease;
+  transition: opacity 0.4s ease;
 }
 .topbar.is-solid::before { opacity: 1; }
-.topbar.is-hidden::before { opacity: 0; } /* fade the veil as it goes, rather than dragging a strip */
+.topbar.is-hidden::before { opacity: 0; transition: opacity 0.16s ease; } /* gone before the bar has left */
 /* Over the wine screen the bar turns with it, rather than sitting there as a slab of cream. */
 .topbar.is-dark .lang { color: var(--paper); }
 .topbar.is-dark img { filter: brightness(0) invert(1); }
@@ -793,6 +790,7 @@ fieldset.field legend { margin-bottom: 10px; }
 .oval-frame { height: 593px; object-fit: cover; }
 .scratch {
   position: absolute;
+  touch-action: none;
   left: 84.5px;
   top: 173px;
   width: 224px;

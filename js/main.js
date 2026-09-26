@@ -569,7 +569,12 @@
     for (let i = 3; i < data.length; i += 4 * 16) { total++; if (data[i] < 40) clear++; }
     return clear / total;
   };
+  // A finger on the oval is scratching, not scrolling: without this the page scrolls underneath
+  // and an in-app browser reads the swipe as "minimise me".
+  canvas.addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
+  canvas.addEventListener("touchmove", (e) => e.preventDefault(), { passive: false });
   canvas.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
     canvas.setPointerCapture(e.pointerId);
     last = toCanvas(e);
     scratch.classList.add("is-scratching");
@@ -579,6 +584,7 @@
   });
   canvas.addEventListener("pointermove", (e) => {
     if (!last) return;
+    e.preventDefault();
     const p = toCanvas(e);
     ctx.beginPath();
     ctx.moveTo(last.x, last.y);
